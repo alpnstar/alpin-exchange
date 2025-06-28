@@ -3,11 +3,8 @@ import {InputLink} from '@/features/search-coin/ui/InputLink';
 import {SideBar} from '@/shared/ui/sidebar';
 import {SearchContent} from '@/features/search-coin/ui/SearchContent';
 
-interface ISearchCoinProps {
 
-}
-
-export const SearchCoin:FC<ISearchCoinProps> = ({}) => {
+export const SearchMobile:FC = ({}) => {
 	const [open, setOpen] = useState(false);
   return (
 

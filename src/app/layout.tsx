@@ -1,6 +1,7 @@
 import type {Metadata} from 'next';
 import {Header} from '@/widgets/header';
 import './globals.css';
+import React from 'react';
 
 export const metadata: Metadata = {
 	title: 'Alpin Exchange',
@@ -14,7 +15,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en" suppressHydrationWarning>
-		<body className="bg-black text-PrimaryText">
+		<body className="bg-black text-PrimaryText text-sm">
 		<Header/>
 		{children}
 		</body>

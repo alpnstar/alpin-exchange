@@ -1,1 +1,1 @@
-export { SearchCoin } from './ui/SearchCoin';
+export { SearchMobile } from './ui/SearchMobile';

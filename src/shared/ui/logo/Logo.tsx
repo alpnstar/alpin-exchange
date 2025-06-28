@@ -4,7 +4,7 @@ import Link from 'next/link';
 export const Logo: FC = ({}) => {
 
 	return (
-		<div>
+		<div className="md:w-31">
 			<Link href="/">ALPINCE</Link>
 		</div>
 	);

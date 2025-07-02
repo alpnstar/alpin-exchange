@@ -1,5 +1,6 @@
 import type {Metadata} from 'next';
-import {Header} from '@/widgets/header';
+import { Header } from '@/widgets/header';
+import { StoreProvider } from '@/app/providers/StoreProvider';
 import './globals.css';
 import React from 'react';
 
@@ -16,8 +17,10 @@ export default function RootLayout({
 	return (
 		<html lang="en"  suppressHydrationWarning>
 		<body className="bg-black text-sm text-PrimaryText">
-		<Header />
-		{children}
+		<StoreProvider>
+			<Header />
+			{children}
+		</StoreProvider>
 		</body>
 		</html>
 

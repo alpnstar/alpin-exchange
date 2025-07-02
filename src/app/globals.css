@@ -220,3 +220,8 @@
 	}
 
 }
+@layer components {
+	.wrapper {
+		@apply max-w-[1531px] w-full mx-auto ;
+	}
+}

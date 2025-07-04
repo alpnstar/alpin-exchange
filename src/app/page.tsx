@@ -1,3 +1,6 @@
+import {ChartWrapper} from '@/widgets/chart/Chart';
+import React from 'react';
+
 export default function Home() {
   return (
     <div>
@@ -14,8 +17,8 @@ export default function Home() {
           </div>
 
           <div
-            className="rounded-md bg-[#1d1e23] p-2 md:col-start-1 md:col-end-3 md:row-start-2 lg:col-start-2 lg:col-end-3">
-            <p>Chart</p>
+            className=" p-5 rounded-md bg-[#1d1e23] p-2 md:col-start-1 md:col-end-3 md:row-start-2 lg:col-start-2 lg:col-end-3">
+            <ChartWrapper/>
           </div>
           <div
             className="hidden rounded-md bg-[#1d1e23] p-2 md:block md:row-start-2 md:row-end-4 lg:col-start-2 lg:row-start-3 lg:row-end-auto">

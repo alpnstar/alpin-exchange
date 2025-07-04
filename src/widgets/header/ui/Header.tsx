@@ -6,7 +6,7 @@ import {BurgerMenu} from '@/widgets/header/ui/BurgerMenu';
 import {ToSignUpButton} from '@/features/registration';
 import {SearchMobile} from '@/features/search-coin';
 import {ToSignInButton} from '@/features/login';
-import {Popup} from '@/shared/ui/popup';
+
 import {SearchDesktop} from '@/features/search-coin/ui/SearchDesktop';
 
 

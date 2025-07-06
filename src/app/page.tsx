@@ -1,7 +1,11 @@
+'use client';
 import {ChartWrapper} from '@/widgets/chart/Chart';
 import React from 'react';
+import {useGetCandlesQuery} from '@/entities/coin/model/coinApi';
 
 export default function Home() {
+  const {data:coins} = useGetCandlesQuery({interval: '1M', symbol: 'BTCUSDT'});
+  console.log(coins);
   return (
     <div>
       <div className="wrapper h-screen">

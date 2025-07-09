@@ -1,10 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
-import {cryptoApi} from '@/entities/coin/model/coinApi';
+import {instrumentApi} from '@/entities/instrument/model/instrumentApi';
+import {instrumentSlice} from '@/entities/instrument/model/instrumentSlice';
+import {listenerMiddleware} from '@/entities/instrument/model/socketMiddleware';
 
 export const store = configureStore({
   reducer: {
-    [cryptoApi.reducerPath]: cryptoApi.reducer,
+    [instrumentApi.reducerPath]: instrumentApi.reducer,
+    instrument: instrumentSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(cryptoApi.middleware),
+    getDefaultMiddleware().concat(instrumentApi.middleware).prepend(listenerMiddleware.middleware),
 });

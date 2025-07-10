@@ -15,6 +15,7 @@ export const instrumentApi = createApi({
 
 				}
 			}),
+			keepUnusedDataFor: 0,
 		}),
 
 	}),

@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import {instrumentApi} from '@/entities/instrument/model/instrumentApi';
 import {instrumentSlice} from '@/entities/instrument/model/instrumentSlice';
-import {listenerMiddleware} from '@/entities/instrument/model/socketMiddleware';
+import {listenerMiddleware} from '@/entities/instrument/model/listenerMiddleware';
 
 export const store = configureStore({
   reducer: {

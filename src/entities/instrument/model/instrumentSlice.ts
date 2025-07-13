@@ -1,5 +1,3 @@
-// src/entities/instrument/model/instrumentSlice.ts
-
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {instrumentApi} from './instrumentApi';
 import {mapBinanceKlineToCandlestick} from '@/entities/instrument/lib/mappers';

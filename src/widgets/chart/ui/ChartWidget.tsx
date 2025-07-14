@@ -5,6 +5,7 @@ import {cn} from '@/shared/lib/cn';
 import {useState} from 'react';
 import {useGetCandlesQuery} from '@/entities/instrument/model/instrumentApi';
 import {useAppSelector} from '@/shared/lib/hooks/useRedux';
+import { BinanceKline } from '@/entities/instrument/model/types';
 
 interface ChartWidgetProps {
 	className?: string;
@@ -25,9 +26,9 @@ const enum ChartInterval {
 	FifteenMinutes = '15m',
 }
 
-export function ChartWidget({className, symbol, interval}: ChartWidgetProps) {
+export function ChartWidget({className, symbol = 'BTCUSDT', interval = '1m'}: ChartWidgetProps) {
 	const [currentChart, setCurrentChart] = useState<ChartType>(ChartType.Candlestick);
-	const [currentInterval, setCurrentInterval] = useState<ChartInterval>(ChartInterval.OneSecond);
+	const [currentInterval, setCurrentInterval] = useState<ChartInterval>(ChartInterval.FiveMinutes);
 
 	const {isLoading, error} = useGetCandlesQuery({symbol: 'BTCUSDT', interval: currentInterval});
 	const candlestickData = useAppSelector(state => state.instrument.candles);

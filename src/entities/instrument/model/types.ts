@@ -25,3 +25,4 @@ export interface BinanceStreamKline {
 	l: string; // Low price
 	x: boolean; // Is this kline closed?
 }
+

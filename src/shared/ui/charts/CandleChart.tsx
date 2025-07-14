@@ -1,60 +1,73 @@
 'use client';
 
-import {cn} from '@/shared/lib/cn';
+import { cn } from '@/shared/lib/cn';
 import {
-	CandlestickData,
-	CandlestickSeries,
-	ChartOptions,
-	createChart,
-	DeepPartial,
-	IChartApi,
-	ISeriesApi,
-	SeriesOptionsMap,
-	Time
+    CandlestickSeries,
+    ChartOptions,
+    createChart,
+    DeepPartial,
+    IChartApi,
+    ISeriesApi,
+    SeriesOptionsMap,
 } from 'lightweight-charts';
-import React, {useEffect, useRef} from 'react';
-import {defaultChartOptions, defaultCandlestickSeriesOptions} from '@/shared/config/charts';
+import React, { useEffect, useRef } from 'react';
+import { defaultCandlestickSeriesOptions, defaultChartOptions } from '@/shared/config/charts';
+import { mapBinanceKlineMapper } from '@/entities/instrument/lib/mappers';
+import { BinanceKline } from '@/entities/instrument/model/types';
+import { usePrevious } from '@/shared/lib/hooks/usePrevious';
 
 interface ChartComponentProps {
-	data: CandlestickData<Time>[];
-	options?: DeepPartial<ChartOptions>;
-	seriesOptions?: DeepPartial<SeriesOptionsMap['Candlestick']>;
-	className?: string;
+    data: BinanceKline[];
+    options?: DeepPartial<ChartOptions>;
+    seriesOptions?: DeepPartial<SeriesOptionsMap['Candlestick']>;
+    className?: string;
 }
 
 export const CandleChart = (props: ChartComponentProps) => {
-	const {
-		data,
-		options: customOptions,
-		seriesOptions: customSeriesOptions,
-		className
-	} = props;
+    const { data, options: customOptions, seriesOptions: customSeriesOptions, className } = props;
 
-	const chartContainerRef = useRef<HTMLDivElement>(null);
-	const chartRef = useRef<IChartApi | null>(null);
-	const seriesRef = useRef<ISeriesApi<'Candlestick'> | null>(null);
+    const chartContainerRef = useRef<HTMLDivElement>(null);
+    const chartRef = useRef<IChartApi | null>(null);
+    const seriesRef = useRef<ISeriesApi<'Candlestick'> | null>(null);
+    const prevData = usePrevious(data);
 
-	useEffect(() => {
-		if (!chartContainerRef.current) return;
+    useEffect(() => {
+        if (!chartContainerRef.current) return;
 
-		const chart = createChart(chartContainerRef.current, {...defaultChartOptions, ...customOptions});
-		const candleStickSeries = chart.addSeries(CandlestickSeries, {...defaultCandlestickSeriesOptions, ...customSeriesOptions});
+        const chart = createChart(chartContainerRef.current, { ...defaultChartOptions, ...customOptions });
+        const candleStickSeries = chart.addSeries(CandlestickSeries, { ...defaultCandlestickSeriesOptions, ...customSeriesOptions });
 
-		chartRef.current = chart;
-		seriesRef.current = candleStickSeries;
+        chartRef.current = chart;
+        seriesRef.current = candleStickSeries;
 
-		return () => {
-			chart.remove();
-			chartRef.current = null;
-			seriesRef.current = null;
-		};
-	}, [customOptions, customSeriesOptions]);
+        if (data.length > 0) {
+            candleStickSeries.setData(data.map(mapBinanceKlineMapper));
+        }
 
-	useEffect(() => {
-		if (seriesRef.current && data) {
-			seriesRef.current.setData(data);
-		}
-	}, [data]);
+        return () => {
+            chart.remove();
+            chartRef.current = null;
+            seriesRef.current = null;
+        };
+    }, [customOptions, customSeriesOptions]);
 
-	return <div ref={chartContainerRef} className={cn('h-full w-full', className)}/>;
+    useEffect(() => {
+        const series = seriesRef.current;
+        if (!series || !data || !prevData) {
+            return;
+        }
+
+        const isFullReset = prevData.length === 0 || (data.length > 0 && prevData.length > 0 && data[0][0] !== prevData[0][0]);
+
+        if (isFullReset) {
+            series.setData(data.map(mapBinanceKlineMapper));
+        } else {
+            const lastKline = data[data.length - 1];
+            if (lastKline) {
+                series.update(mapBinanceKlineMapper(lastKline));
+            }
+        }
+    }, [data, prevData]);
+
+    return <div ref={chartContainerRef} className={cn('h-full w-full', className)} />;
 };

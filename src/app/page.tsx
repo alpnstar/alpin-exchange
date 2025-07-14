@@ -1,8 +1,9 @@
 'use client';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {TradingInfo} from '@/widgets/trading-info';
 
 export default function Home() {
+
 	return (
 		<div>
 			<div className="wrapper h-screen mt-2">
@@ -17,7 +18,7 @@ export default function Home() {
 						<p>Order Book(биржевой стакан)</p>
 					</div>
 
-					<TradingInfo/>
+					<TradingInfo data={data}/>
 					<div
 						className="hidden rounded-md bg-[#1d1e23] p-2 md:block md:row-start-2 md:row-end-4 lg:col-start-2 lg:row-start-3 lg:row-end-auto">
 						<p>Trade Form</p>

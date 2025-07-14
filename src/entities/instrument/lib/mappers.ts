@@ -1,7 +1,7 @@
 import {BinanceKline, BinanceStreamKline} from '../model/types';
 import {AreaData, CandlestickData, Time} from 'lightweight-charts';
 
-export function mapBinanceKlineToCandlestick(
+export function mapBinanceKlineMapper(
 	kline: BinanceKline
 ): CandlestickData {
 	return {
@@ -13,7 +13,7 @@ export function mapBinanceKlineToCandlestick(
 	};
 }
 
-export function mapBinanceKlineToAreaData(
+export function areaDataMapper(
 	kline: BinanceKline
 ): AreaData {
 	return {
@@ -21,10 +21,28 @@ export function mapBinanceKlineToAreaData(
 		value: parseFloat(kline[4]), // Используем цену закрытия (Close) как основное значение
 	};
 }
-export const mapBinanceStreamToCandlestick = (streamData: BinanceStreamKline): CandlestickData => ({
+export const mapBinanceKlineStreamMapper = (streamData: BinanceStreamKline): CandlestickData => ({
 	time: streamData.t / 1000 as Time,
 	open: parseFloat(streamData.o),
 	high: parseFloat(streamData.h),
 	low: parseFloat(streamData.l),
 	close: parseFloat(streamData.c),
 });
+
+
+export const mapBinanceStreamKlineToBinanceKline = (streamKline: BinanceStreamKline): BinanceKline => {
+	return [
+		streamKline.t,      // Open time
+		streamKline.o,      // Open
+		streamKline.h,      // High
+		streamKline.l,      // Low
+		streamKline.c,      // Close
+		'',                 // Volume - нет в стриме, оставляем пустым
+		streamKline.T,      // Close time
+		'',                 // Quote asset volume - нет в стриме
+		0,                  // Number of trades - нет в стриме, ставим 0
+		'',                 // Taker buy base asset volume - нет в стриме
+		'',                 // Taker buy quote asset volume - нет в стриме
+		''                  // Ignore
+	];
+};

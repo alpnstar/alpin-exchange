@@ -1,10 +1,9 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {instrumentApi} from './instrumentApi';
-import {mapBinanceKlineToCandlestick} from '@/entities/instrument/lib/mappers';
-import {CandlestickData} from 'lightweight-charts';
+import {BinanceKline} from '@/entities/instrument/model/types';
 
 interface InstrumentState {
-	candles: CandlestickData[];
+	candles: BinanceKline[];
 }
 
 const initialState: InstrumentState = {
@@ -15,11 +14,11 @@ export const instrumentSlice = createSlice({
 	name: 'instrument',
 	initialState,
 	reducers: {
-		updateLastCandle: (state, action: PayloadAction<CandlestickData>) => {
+		updateLastCandle: (state, action: PayloadAction<BinanceKline>) => {
 			const newCandle = action.payload;
 			const lastCandle = state.candles[state.candles.length - 1];
 
-			if (lastCandle && lastCandle.time === newCandle.time) {
+			if (lastCandle && lastCandle[0] === newCandle[0]) {
 				state.candles[state.candles.length - 1] = newCandle;
 			} else {
 				state.candles.push(newCandle);
@@ -30,7 +29,7 @@ export const instrumentSlice = createSlice({
 		builder.addMatcher(
 			instrumentApi.endpoints.getCandles.matchFulfilled,
 			(state, action) => {
-				state.candles = action.payload.map(mapBinanceKlineToCandlestick);
+				state.candles = action.payload;
 			}
 		);
 	}

@@ -1,4 +1,5 @@
-// shared/api/websocket/binanceWebSocket.ts
+import {mapBinanceStreamTo24HrTickerStatistics} from '@/entities/instrument/lib/mappers';
+
 export class BinanceWebSocket {
 	private socket: WebSocket | null = null;
 	private subscriptions: Set<string> = new Set();
@@ -19,11 +20,16 @@ export class BinanceWebSocket {
 			this.socket.onopen = () => this.resubscribeAll();
 
 			this.socket.onmessage = (event) => {
-				const data = JSON.parse(event.data);
+				let data = JSON.parse(event.data);
 
 				if (data.result === null) return;
-
-				const streamName = `${data.s.toLowerCase()}@${data.e}_${data.k.i}` || '';
+				let streamName = '';
+				if (data.e === 'kline') {
+					streamName = `${data.s.toLowerCase()}@${data.e}${data.k ? `_${data.k?.i}` : ''}` || '';
+				} else if (data.e === '24hrTicker') {
+					streamName = `${data.s.toLowerCase()}@ticker`;
+					data = mapBinanceStreamTo24HrTickerStatistics(data);
+				}
 				const handler = this.messageHandlers.get(streamName);
 
 				if (handler) handler(data);
@@ -37,7 +43,7 @@ export class BinanceWebSocket {
 		return this.socket;
 	}
 
-	subscribe(streamName: string, handler: (data: any) => void) {
+	subscribe(data: any, streamName: string, handler: (data: any) => void) {
 		this.subscriptions.add(streamName);
 		this.messageHandlers.set(streamName, handler);
 

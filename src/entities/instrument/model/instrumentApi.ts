@@ -1,5 +1,5 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
-import {BinanceKline} from '@/entities/instrument/model/types';
+import {Binance24HrTickerStatistics, BinanceKline} from '@/entities/instrument/model/types';
 
 
 export const instrumentApi = createApi({
@@ -13,11 +13,20 @@ export const instrumentApi = createApi({
 				headers: {}
 			}),
 			keepUnusedDataFor: 0
+		}),
+		getTicker: builder.query<Binance24HrTickerStatistics, { symbol: string }>({
+			query: ({symbol}) => ({
+				url: `/ticker/24hr?symbol=${symbol}`,
+				headers: {}
+			}),
+			keepUnusedDataFor: 0
 		})
+
 
 	})
 });
 
 export const {
-	useGetCandlesQuery
+	useGetCandlesQuery,
+	useGetTickerQuery
 } = instrumentApi;

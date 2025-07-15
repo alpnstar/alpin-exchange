@@ -23,4 +23,9 @@ export const defaultCandlestickSeriesOptions = {
     borderVisible: false,
     wickUpColor: '#26a69a',
     wickDownColor: '#ef5350',
+    priceFormat: {
+        type: 'price',
+        precision: 8,
+        minMove: 0.00000001,
+    },
 };

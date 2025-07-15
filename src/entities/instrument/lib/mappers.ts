@@ -1,7 +1,12 @@
-import {BinanceKline, BinanceStreamKline} from '../model/types';
+import {
+	Binance24HrTickerStatistics,
+	Binance24HrTickerStatisticsStream,
+	BinanceKline,
+	BinanceStreamKline
+} from '../model/types';
 import {AreaData, CandlestickData, Time} from 'lightweight-charts';
 
-export function mapBinanceKlineMapper(
+export function mapBinanceKlineToCandlestickData(
 	kline: BinanceKline
 ): CandlestickData {
 	return {
@@ -13,7 +18,7 @@ export function mapBinanceKlineMapper(
 	};
 }
 
-export function areaDataMapper(
+export function mapBinanceKlineToAreaData(
 	kline: BinanceKline
 ): AreaData {
 	return {
@@ -21,7 +26,7 @@ export function areaDataMapper(
 		value: parseFloat(kline[4]), // Используем цену закрытия (Close) как основное значение
 	};
 }
-export const mapBinanceKlineStreamMapper = (streamData: BinanceStreamKline): CandlestickData => ({
+export const mapBinanceStreamKlineToCandlestickData = (streamData: BinanceStreamKline): CandlestickData => ({
 	time: streamData.t / 1000 as Time,
 	open: parseFloat(streamData.o),
 	high: parseFloat(streamData.h),
@@ -45,4 +50,32 @@ export const mapBinanceStreamKlineToBinanceKline = (streamKline: BinanceStreamKl
 		'',                 // Taker buy quote asset volume - нет в стриме
 		''                  // Ignore
 	];
+};
+
+export const mapBinanceStreamTo24HrTickerStatistics = (
+    streamData: Binance24HrTickerStatisticsStream
+): Binance24HrTickerStatistics => {
+    return {
+        symbol: streamData.s,
+        priceChange: streamData.p,
+        priceChangePercent: streamData.P,
+        weightedAvgPrice: streamData.w,
+        prevClosePrice: streamData.x,
+        lastPrice: streamData.c,
+        lastQty: streamData.Q,
+        bidPrice: streamData.b,
+        bidQty: streamData.B,
+        askPrice: streamData.a,
+        askQty: streamData.A,
+        openPrice: streamData.o,
+        highPrice: streamData.h,
+        lowPrice: streamData.l,
+        volume: streamData.v,
+        quoteVolume: streamData.q,
+        openTime: streamData.O,
+        closeTime: streamData.C,
+        firstId: streamData.F,
+        lastId: streamData.L,
+        count: streamData.n,
+    };
 };

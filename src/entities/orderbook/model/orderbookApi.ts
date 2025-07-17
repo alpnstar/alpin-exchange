@@ -9,7 +9,6 @@ export const orderbookApi = createApi({
 	endpoints: (builder) => ({
 		getOrderbook: builder.query<OrderbookData, { symbol: string; limit?: number }>({
 			query: ({symbol, limit = 100}) => `depth?symbol=${symbol}&limit=${limit}`,
-			keepUnusedDataFor: 0,
 			async onCacheEntryAdded(
 				{ symbol },
 				{ cacheDataLoaded, cacheEntryRemoved, dispatch }

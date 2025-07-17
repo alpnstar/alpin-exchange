@@ -5,7 +5,7 @@ import { useAppSelector } from '@/shared/lib/hooks/useRedux';
 import {useEffect, useMemo} from 'react';
 
 export const useOrderbook = (symbol: string) => {
-    const { isLoading, isError } = useGetOrderbookQuery({ symbol });
+    const { isLoading, isError ,isFetching} = useGetOrderbookQuery({ symbol });
     const orderbookData = useAppSelector((state) => state.orderbook.data);
     const asks = useMemo(() => orderbookData?.asks.slice(0, 15).reverse() || [], [orderbookData]);
     const bids = useMemo(() => orderbookData?.bids.slice(0, 15) || [], [orderbookData]);
@@ -22,6 +22,7 @@ export const useOrderbook = (symbol: string) => {
         bids,
         asks,
         isLoading,
+        isFetching,
         isError,
         maxTotalBids,
         maxTotalAsks,

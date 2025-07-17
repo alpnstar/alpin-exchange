@@ -12,7 +12,6 @@ export const instrumentApi = createApi({
 				url: `klines?symbol=${symbol}&interval=${interval}`,
 				headers: {}
 			}),
-			keepUnusedDataFor: 0
 		}),
 		getTicker: builder.query<Binance24HrTickerStatistics, { symbol: string }>({
 			query: ({symbol}) => ({

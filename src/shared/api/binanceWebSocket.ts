@@ -30,6 +30,9 @@ export class BinanceWebSocket {
 					streamName = `${data.s.toLowerCase()}@ticker`;
 					data = mapBinanceStreamTo24HrTickerStatistics(data);
 				}
+				else if (data.e === 'depthUpdate') {
+					streamName = `${data.s.toLowerCase()}@depth`;
+				}
 				const handler = this.messageHandlers.get(streamName);
 
 				if (handler) handler(data);

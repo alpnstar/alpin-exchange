@@ -19,18 +19,18 @@ const TickerStat: FC<TickerStatProps> = ({label, value, className, valueClassNam
 );
 
 export const Ticker: FC = () => {
-	const {isLoading, isError} = useGetTickerQuery({symbol: 'XRPBNB'});
+	const {isLoading, isError} = useGetTickerQuery({symbol: 'BTCUSDT'});
 	const data = useAppSelector(state => state.instrument.ticker);
 	const prevLastPrice = usePrevious(data?.lastPrice);
 
 	const lastPriceColor = data && prevLastPrice && prevLastPrice >= data.lastPrice ? 'text-sell' : 'text-buy';
 	const priceChangeColor = data && Math.sign(+data.priceChange) === -1 ? 'text-sell' : 'text-buy';
 
-	const formattedPriceChange = data && formatNumberWithCommas(Number(data.priceChange), {decimals: 8}) + ' ' + data.priceChangePercent + '%';
+	const formattedPriceChange = data && formatNumberWithCommas(Number(data.priceChange)) + ' ' + data.priceChangePercent + '%';
 
 	return (
 		<div
-			className="col-start-1 flex items-center rounded-md bg-[#1d1e23] px-3 py-2 md:col-end-[-1] lg:col-end-3 ">
+			className="col-start-1 flex items-center rounded-md bg-bg px-3 py-2 md:col-end-[-1] lg:col-end-3 ">
 			{isLoading && <div>Loading...</div>}
 			{isError && <div>Error loading data</div>}
 			{data && (

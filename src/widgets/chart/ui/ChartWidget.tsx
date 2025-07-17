@@ -25,11 +25,11 @@ const enum ChartInterval {
 	FifteenMinutes = '15m',
 }
 
-export function ChartWidget({className, symbol = 'XRPBNB', interval = '1m'}: ChartWidgetProps) {
+export function ChartWidget({className, symbol = 'BTCUSDT', interval = '1m'}: ChartWidgetProps) {
 	const [currentChart, setCurrentChart] = useState<ChartType>(ChartType.Candlestick);
 	const [currentInterval, setCurrentInterval] = useState<ChartInterval>(ChartInterval.FiveMinutes);
 
-	const {isLoading, error} = useGetCandlesQuery({symbol: 'XRPBNB', interval: currentInterval});
+	const {isLoading, error} = useGetCandlesQuery({symbol: 'BTCUSDT', interval: currentInterval});
 	const candlestickData = useAppSelector(state => state.instrument.candles);
 
 

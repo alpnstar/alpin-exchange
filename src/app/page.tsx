@@ -1,14 +1,10 @@
 'use client';
 import React from 'react';
-import {TradingInfo} from '@/widgets/trading-info';
 import {Ticker} from '@/widgets/ticker/ui/Ticker';
 import {Orderbook} from '@/widgets/orderbook';
 import {TradingPanel} from '@/widgets/TradingPanel';
-import {useIsMobile} from '@/shared/lib/hooks/use-mobile';
 
 export default function Home() {
-	const isMobile = useIsMobile();
-	console.log(isMobile);
 
 	return (
 		<div>
@@ -16,7 +12,7 @@ export default function Home() {
 				<div
 					className="grid h-auto flex-1 grid-cols-[1fr] grid-rows-[minmax(50px,auto)_minmax(550px,auto)_auto] gap-2 md:grid-cols-[1fr_1fr_1fr] md:grid-rows-[minmax(50px,auto)_545px_266px_300px] lg:grid-cols-[320px_1fr_200px] lg:grid-rows-[minmax(50px,auto)_600px_minmax(260px,auto)_560px]">
 					<Ticker/>
-					{!isMobile && <Orderbook/>}
+					 <Orderbook/>
 					<TradingPanel/>
 					<div
 						className="hidden rounded-md bg-bg p-2 md:block md:row-start-2 md:row-end-4 lg:col-start-2 lg:row-start-3 lg:row-end-auto">
@@ -43,3 +39,5 @@ export default function Home() {
 		</div>
 	);
 }
+
+orderbook api was refactored for better optimization

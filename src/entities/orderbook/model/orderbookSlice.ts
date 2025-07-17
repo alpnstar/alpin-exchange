@@ -40,7 +40,7 @@ export const orderbookSlice = createSlice({
             state.data = null;
             state.lastUpdateId = null;
         },
-		handleOrderbookUpdate: (state, action: PayloadAction<OrderbookUpdate>) => {
+		handleOrderbookUpdate: (state, action: PayloadAction<{ symbol: string } & OrderbookUpdate>) => {
 			if (!state.data || !state.lastUpdateId) return;
 
 			const update = action.payload;

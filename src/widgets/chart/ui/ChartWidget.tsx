@@ -8,8 +8,8 @@ import {useAppSelector} from '@/shared/lib/hooks/useRedux';
 
 interface ChartWidgetProps {
 	className?: string;
-	symbol: string;
-	interval: string;
+	symbol?: string;
+	interval?: string;
 }
 
 const enum ChartType {
@@ -25,8 +25,8 @@ const enum ChartInterval {
 	FifteenMinutes = '15m',
 }
 
-export function ChartWidget({className, symbol = 'BTCUSDT', interval = '1m'}: ChartWidgetProps) {
-	const [currentChart, setCurrentChart] = useState<ChartType>(ChartType.Candlestick);
+export function ChartWidget({className/*, symbol = 'BTCUSDT', interval = '1m'*/}: ChartWidgetProps) {
+	const [currentChart/*, setCurrentChart*/] = useState<ChartType>(ChartType.Candlestick);
 	const [currentInterval, setCurrentInterval] = useState<ChartInterval>(ChartInterval.FiveMinutes);
 
 	const {isLoading, error} = useGetCandlesQuery({symbol: 'BTCUSDT', interval: currentInterval});

@@ -1,4 +1,4 @@
-import { ColorType, DeepPartial, ChartOptions } from 'lightweight-charts';
+import {ColorType, DeepPartial, ChartOptions, CandlestickStyleOptions} from 'lightweight-charts';
 
 /**
  * Общедоступная конфигурация по умолчанию для всех графиков в приложении.
@@ -17,7 +17,7 @@ export const defaultChartOptions: DeepPartial<ChartOptions> = {
 };
 
 // Здесь же можно хранить и другие конфиги, например для серий
-export const defaultCandlestickSeriesOptions = {
+export const defaultCandlestickSeriesOptions:CandlestickStyleOptions = {
     upColor: '#26a69a',
     downColor: '#ef5350',
     borderVisible: false,

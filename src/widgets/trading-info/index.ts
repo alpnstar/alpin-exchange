@@ -1,1 +1,1 @@
-export {TradingInfo} from './ui/TradingInfo';
+export { TradingInfo } from "./ui/TradingInfo";

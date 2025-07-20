@@ -1,15 +1,17 @@
-import React, {FC} from "react";
-import {SearchBar} from '@/features/search-coin/ui/SearchBar';
+import React, { FC } from "react";
+import { SearchBar } from "@/features/search-coin/ui/SearchBar";
 
 interface ISearchContentProps {
-  setOpen: (open: boolean) => void
+  setOpen: (open: boolean) => void;
 }
 
-export const SearchContent:FC<ISearchContentProps> = ({ setOpen}) => {
-  
+export const SearchContent: FC<ISearchContentProps> = ({ setOpen }) => {
   return (
     <div>
-      <SearchBar cancelVariant="persistent" onCancelClick={() => setOpen(false)}/>
+      <SearchBar
+        cancelVariant="persistent"
+        onCancelClick={() => setOpen(false)}
+      />
     </div>
   );
 };

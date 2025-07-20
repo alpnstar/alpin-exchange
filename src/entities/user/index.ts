@@ -1,1 +1,2 @@
-// Public API for User entity
+export * from './model';
+export * from './ui';

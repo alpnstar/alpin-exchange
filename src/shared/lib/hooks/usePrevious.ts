@@ -1,15 +1,15 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect } from "react";
 
 export function usePrevious<T>(value: T): T | undefined {
   // Используем useRef для хранения предыдущего значения
   // ref.current не вызывает перерендер при изменении
   const ref = useRef<T | undefined>(undefined);
-  
+
   // Сохраняем текущее значение в ref после рендера
   useEffect(() => {
     ref.current = value;
   });
-  
+
   // Возвращаем предыдущее значение (до текущего рендера)
   return ref.current;
 }

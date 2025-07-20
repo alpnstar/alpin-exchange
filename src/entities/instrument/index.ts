@@ -1,1 +1,3 @@
-// Public API for Coin entity
+export * from './model';
+export * from './ui';
+export * from './lib';

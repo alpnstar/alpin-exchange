@@ -72,19 +72,27 @@ export const Trades: FC<{ className?: string; listHeight?: string }> = ({
   }, []);
 
   return (
-    <div className={cn("bg-bg rounded-md px-4", className)}>
-      <Tabs defaultValue="Market Trades">
+    <div
+      className={cn(
+        "bg-bg flex grow basis-0 flex-col rounded-md px-4",
+        className,
+      )}
+    >
+      <Tabs className="flex grow basis-0 flex-col" defaultValue="Market Trades">
         <TabsList className="mb-1 hidden gap-4 md:flex">
           <TabsTrigger value={"Market Trades"}>Market Trades</TabsTrigger>
           <TabsTrigger value={"My Trades"}>My Trades</TabsTrigger>
         </TabsList>
-        <TabsContent value={"Market Trades"}>
+        <TabsContent
+          className="flex grow basis-0 flex-col"
+          value={"Market Trades"}
+        >
           <div className="flex p-1 text-xs text-gray-500">
             <span className="flex-grow basis-0 text-left">Price (USDT)</span>
             <span className="flex-grow basis-0 text-right">Amount (BTC)</span>
             <span className="flex-grow basis-0 text-right">Time</span>
           </div>
-          <div ref={listRef} className={`overflow-y-scroll h-[${listHeight}]`}>
+          <div ref={listRef} className="grow basis-0 overflow-y-scroll">
             <ul>
               {trades.map((item) => (
                 <TradesTableRow

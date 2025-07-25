@@ -1,3 +1,4 @@
+/* src/app/api/binance/[...path]/route.ts */
 import { NextResponse } from "next/server";
 
 const BINANCE_API_URL = process.env.NEXT_PUBLIC_BINANCE_REST_API_URL;
@@ -9,7 +10,6 @@ export async function GET(
   const path = params.path.join("/");
   const { searchParams } = new URL(request.url);
   const url = `${BINANCE_API_URL}/${path}?${searchParams.toString()}`;
-
   try {
     const res = await fetch(url, {
       headers: {

@@ -1,4 +1,9 @@
-import { CandlestickSeriesOptions, ChartOptions, ColorType, DeepPartial } from "lightweight-charts";
+import {
+  CandlestickSeriesOptions,
+  ChartOptions,
+  ColorType,
+  DeepPartial,
+} from "lightweight-charts";
 
 export const defaultChartOptions: DeepPartial<ChartOptions> = {
   layout: {

@@ -1,5 +1,3 @@
-import { mapBinanceStreamTo24HrTickerStatistics } from "@/entities/instrument/lib/mappers";
-
 export class BinanceWebSocket {
   private socket: WebSocket | null = null;
   private subscriptions: Set<string> = new Set();
@@ -20,7 +18,7 @@ export class BinanceWebSocket {
       this.socket.onopen = () => this.resubscribeAll();
 
       this.socket.onmessage = (event) => {
-        let data = JSON.parse(event.data);
+        const data = JSON.parse(event.data);
 
         if (data.result === null) return;
         let streamName = "";
@@ -29,8 +27,15 @@ export class BinanceWebSocket {
             `${data.s.toLowerCase()}@${data.e}${data.k ? `_${data.k?.i}` : ""}` ||
             "";
         } else if (data.e === "24hrTicker") {
-          streamName = `${data.s.toLowerCase()}@ticker`;
-          data = mapBinanceStreamTo24HrTickerStatistics(data);
+          if (this.subscriptions.has(`${data.s.toLowerCase()}@ticker`)) {
+            streamName = `${data.s.toLowerCase()}@ticker`;
+          }
+        } else if (
+          Array.isArray(data) &&
+          data[0].e === "24hrTicker" &&
+          this.subscriptions.has(`!ticker@arr`)
+        ) {
+          streamName = "!ticker@arr";
         } else if (data.e === "depthUpdate") {
           streamName = `${data.s.toLowerCase()}@depth`;
         } else if (data.e === "aggTrade") {
@@ -49,7 +54,7 @@ export class BinanceWebSocket {
     return this.socket;
   }
 
-  subscribe(data: any, streamName: string, handler: (data: any) => void) {
+  subscribe(event: string, streamName: string, handler: (data: any) => void) {
     this.subscriptions.add(streamName);
     this.messageHandlers.set(streamName, handler);
 

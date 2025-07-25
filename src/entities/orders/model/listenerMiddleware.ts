@@ -1,27 +1,27 @@
 import { createListenerMiddleware } from "@reduxjs/toolkit";
-import { orderbookApi } from "./orderbookApi";
-import { handleOrderbookUpdate } from "./orderbookSlice";
+import { ordersApi } from "./ordersApi";
 import {
   AppDispatch,
   RootState,
 } from "@/app/providers/StoreProvider/config/types";
+import { handleOrdersUpdate } from "@/entities/orders/model/ordersSlice";
 
-export const orderbookListenerMiddleware = createListenerMiddleware();
+export const ordersListenerMiddleware = createListenerMiddleware();
 
-orderbookListenerMiddleware.startListening({
-  actionCreator: handleOrderbookUpdate,
+ordersListenerMiddleware.startListening({
+  actionCreator: handleOrdersUpdate,
   effect: async (action, listenerApi) => {
     const dispatch = listenerApi.dispatch as AppDispatch;
     const state = listenerApi.getState() as RootState;
     const { symbol, U } = action.payload;
-    const lastUpdateId = state.orderbook.lastUpdateId;
+    const lastUpdateId = state.orders.lastUpdateId;
 
     if (!lastUpdateId) return;
 
     if (U > lastUpdateId + 1) {
-      console.error("Orderbook desynchronized. Re-fetching snapshot...");
+      console.error("Orders desynchronized. Re-fetching snapshot...");
       dispatch(
-        orderbookApi.endpoints.getOrderbook.initiate(
+        ordersApi.endpoints.getOrders.initiate(
           { symbol: symbol.toUpperCase() },
           { forceRefetch: true },
         ),

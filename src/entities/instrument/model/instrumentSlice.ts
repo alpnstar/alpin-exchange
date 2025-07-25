@@ -40,11 +40,5 @@ export const instrumentSlice = createSlice({
         state.candles = action.payload;
       },
     );
-    builder.addMatcher(
-      instrumentApi.endpoints.getTicker.matchFulfilled,
-      (state, action) => {
-        state.ticker = action.payload;
-      },
-    );
   },
 });

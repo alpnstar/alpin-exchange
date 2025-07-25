@@ -9,12 +9,13 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/shared/ui/tabs/Tabs";
-import { Trades } from "@/widgets/trades/ui/Trades";
+import { Trades } from "@/entities/trades/ui/Trades";
+import { PairList } from "@/widgets/pair-list";
 
 export const TradingPanel = () => {
   return (
     <Tabs
-      className="bg-bg rounded-md md:col-start-2 md:col-end-3 md:row-start-2 lg:col-start-2 lg:col-end-3"
+      className="bg-bg flex h-auto flex-col rounded-md md:col-start-2 md:col-end-3 md:row-start-2 lg:col-start-2 lg:col-end-3"
       defaultValue="chart"
     >
       <TabsList className="px-4">
@@ -29,11 +30,11 @@ export const TradingPanel = () => {
       <TabsContent value={"chart"}>
         <ChartWidget />
       </TabsContent>
-      <TabsContent value={"orderbook"}>
+      <TabsContent className="flex grow basis-0 flex-col" value={"orderbook"}>
         <Orderbook />
       </TabsContent>
-      <TabsContent value={"trades"}>
-        <Trades listHeight="535px" />
+      <TabsContent className="flex grow basis-0 flex-col" value={"trades"}>
+        <Trades />
       </TabsContent>
     </Tabs>
   );

@@ -1,11 +1,11 @@
 "use client";
-import { useGetOrderbookQuery } from "@/entities/orderbook";
+import { useGetOrdersQuery } from "@/entities/orders";
 import { useAppSelector } from "@/shared/lib/hooks/useRedux";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 
 export const useOrderbook = (symbol: string) => {
-  const { isLoading, isError, isFetching } = useGetOrderbookQuery({ symbol });
-  const orderbookData = useAppSelector((state) => state.orderbook.data);
+  const { isLoading, isError, isFetching } = useGetOrdersQuery({ symbol });
+  const orderbookData = useAppSelector((state) => state.orders.data);
   const asks = useMemo(
     () => orderbookData?.asks.slice(0, 15).reverse() || [],
     [orderbookData],

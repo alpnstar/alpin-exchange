@@ -19,9 +19,13 @@ export const tradesApi = createApi({
           const streamName = `${symbol.toLowerCase()}@aggTrade`;
 
           binanceWebSocket.connect();
-          binanceWebSocket.subscribe({}, streamName, (data: AggTradeStream) => {
-            dispatch(handleTradesUpdate(data));
-          });
+          binanceWebSocket.subscribe(
+            { symbol, event: "aggTrade" },
+            streamName,
+            (data: AggTradeStream) => {
+              dispatch(handleTradesUpdate(data));
+            },
+          );
 
           await cacheEntryRemoved;
 

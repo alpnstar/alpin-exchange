@@ -1,8 +1,8 @@
 import React, { FC } from "react";
-import { useGetTickerQuery } from "@/entities/instrument/model/instrumentApi";
 import { useAppSelector } from "@/shared/lib/hooks/useRedux";
 import { formatNumberWithCommas } from "@/shared/lib/formatters";
 import { usePrevious } from "@/shared/lib/hooks/usePrevious";
+import { useGetTickerQuery } from "@/entities/tickers/model/tickersApi";
 
 interface TickerStatProps {
   label: string;
@@ -25,9 +25,8 @@ const TickerStat: FC<TickerStatProps> = ({
 
 export const Ticker: FC = () => {
   const { isLoading, isError } = useGetTickerQuery({ symbol: "BTCUSDT" });
-  const data = useAppSelector((state) => state.instrument.ticker);
+  const data = useAppSelector((state) => state.tickers.ticker);
   const prevLastPrice = usePrevious(data?.lastPrice);
-
   const lastPriceColor =
     data && prevLastPrice && prevLastPrice >= data.lastPrice
       ? "text-sell"

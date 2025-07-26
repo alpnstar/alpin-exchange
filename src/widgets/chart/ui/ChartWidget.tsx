@@ -27,8 +27,7 @@ const enum ChartInterval {
 
 export function ChartWidget({
   className,
-  symbol = "BTCUSDT",
-  interval = "1m",
+  symbol = '',
 }: ChartWidgetProps) {
   const [currentChart /*, setCurrentChart*/] = useState<ChartType>(
     ChartType.Candlestick,

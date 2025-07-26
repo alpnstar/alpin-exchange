@@ -16,7 +16,7 @@ instrumentlistenerMiddleware.startListening({
     const { symbol, interval } = action.meta.arg.originalArgs;
     const wsUrl = `${symbol.toLowerCase()}@kline_${interval}`;
     binanceWebSocket.connect();
-    binanceWebSocket.subscribe("kline", wsUrl, (data) => {
+    binanceWebSocket.subscribe( wsUrl, (data) => {
       const newCandleData = mapBinanceStreamKlineToBinanceKline(data.k);
       listenerApi.dispatch(
         instrumentSlice.actions.updateLastCandle(newCandleData),

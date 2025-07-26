@@ -10,7 +10,6 @@ import {
   TabsTrigger,
 } from "@/shared/ui/tabs/Tabs";
 import { Trades } from "@/entities/trades/ui/Trades";
-import { PairList } from "@/widgets/pair-list";
 
 export const TradingPanel = ({ symbol }: { symbol: string }) => {
   return (

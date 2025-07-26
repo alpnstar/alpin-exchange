@@ -26,7 +26,9 @@ const enum ChartInterval {
 }
 
 export function ChartWidget({
-  className /*, symbol = 'BTCUSDT', interval = '1m'*/,
+  className,
+  symbol = "BTCUSDT",
+  interval = "1m",
 }: ChartWidgetProps) {
   const [currentChart /*, setCurrentChart*/] = useState<ChartType>(
     ChartType.Candlestick,
@@ -36,7 +38,7 @@ export function ChartWidget({
   );
 
   const { isLoading, error } = useGetCandlesQuery({
-    symbol: "BTCUSDT",
+    symbol: symbol,
     interval: currentInterval,
   });
   const candlestickData = useAppSelector((state) => state.instrument.candles);

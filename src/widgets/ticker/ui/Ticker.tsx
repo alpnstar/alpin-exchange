@@ -23,8 +23,8 @@ const TickerStat: FC<TickerStatProps> = ({
   </div>
 );
 
-export const Ticker: FC = () => {
-  const { isLoading, isError } = useGetTickerQuery({ symbol: "BTCUSDT" });
+export const Ticker: FC<{ symbol: string }> = ({ symbol }) => {
+  const { isLoading, isError } = useGetTickerQuery({ symbol });
   const data = useAppSelector((state) => state.tickers.ticker);
   const prevLastPrice = usePrevious(data?.lastPrice);
   const lastPriceColor =

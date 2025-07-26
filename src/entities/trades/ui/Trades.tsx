@@ -36,11 +36,12 @@ export const TradesTableRow: React.FC<any> = ({
   );
 };
 
-export const Trades: FC<{ className?: string; listHeight?: string }> = ({
-  className,
-  listHeight = "282px",
-}) => {
-  const { isLoading, isError } = useGetTradesQuery({ symbol: "BTCUSDT" });
+export const Trades: FC<{
+  className?: string;
+  listHeight?: string;
+  symbol: string;
+}> = ({ className, listHeight = "282px", symbol }) => {
+  const { isLoading, isError } = useGetTradesQuery({ symbol });
   const trades = useAppSelector((state) => state.trades.data);
 
   const listRef = useRef<HTMLDivElement>(null);

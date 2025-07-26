@@ -12,7 +12,7 @@ import {
 import { Trades } from "@/entities/trades/ui/Trades";
 import { PairList } from "@/widgets/pair-list";
 
-export const TradingPanel = () => {
+export const TradingPanel = ({ symbol }: { symbol: string }) => {
   return (
     <Tabs
       className="bg-bg flex h-auto flex-col rounded-md md:col-start-2 md:col-end-3 md:row-start-2 lg:col-start-2 lg:col-end-3"
@@ -28,13 +28,13 @@ export const TradingPanel = () => {
         </TabsTrigger>
       </TabsList>
       <TabsContent value={"chart"}>
-        <ChartWidget />
+        <ChartWidget symbol={symbol} />
       </TabsContent>
       <TabsContent className="flex grow basis-0 flex-col" value={"orderbook"}>
-        <Orderbook />
+        <Orderbook symbol={symbol} />
       </TabsContent>
       <TabsContent className="flex grow basis-0 flex-col" value={"trades"}>
-        <Trades />
+        <Trades symbol={symbol} />
       </TabsContent>
     </Tabs>
   );

@@ -4,8 +4,14 @@ import { useOrderbook } from "../lib/hooks";
 import { OrderbookTable } from "./OrderbookTable";
 import { cn } from "@/shared/lib/cn";
 
-export const Orderbook = ({ className }: { className?: string }) => {
-  const { bids, asks, isLoading, isError } = useOrderbook("BTCUSDT");
+export const Orderbook = ({
+  className,
+  symbol,
+}: {
+  className?: string;
+  symbol: string;
+}) => {
+  const { bids, asks, isLoading, isError } = useOrderbook(symbol);
 
   return (
     <div

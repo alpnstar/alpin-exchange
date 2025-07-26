@@ -10,6 +10,7 @@ export const tradesApi = createApi({
     getTrades: builder.query<AggTrade[], { symbol: string; limit?: number }>({
       query: ({ symbol, limit = 100 }) =>
         `aggTrades?symbol=${symbol}&limit=${limit}`,
+      keepUnusedDataFor: 0,
       async onCacheEntryAdded(
         { symbol },
         { cacheDataLoaded, cacheEntryRemoved, dispatch },

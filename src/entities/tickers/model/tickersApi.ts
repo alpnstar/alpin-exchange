@@ -6,15 +6,15 @@ import {
 } from "@/entities/tickers/model/types";
 import {
   setTickerByStream,
-  updateTickers,
 } from "@/entities/tickers/model/tickersSlice";
 
 export const tickersApi = createApi({
   reducerPath: "tickersApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "/api/binance/" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "/api/binance/" , }),
   endpoints: (builder) => ({
     getTicker: builder.query<Binance24HrTickerStatistics, { symbol: string }>({
       query: ({ symbol }) => `ticker/24hr?symbol=${symbol}`,
+      keepUnusedDataFor: 0,
       async onCacheEntryAdded(
         { symbol },
         { cacheDataLoaded, cacheEntryRemoved, dispatch },
@@ -42,6 +42,7 @@ export const tickersApi = createApi({
     }),
     getTickers: builder.query<Binance24HrTickerStatistics[], void>({
       query: () => `/tickers?symbol=USDT&limit=100&sort=alphabet`,
+      keepUnusedDataFor: 0,
     }),
   }),
 });

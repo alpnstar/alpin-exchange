@@ -54,7 +54,7 @@ export class BinanceWebSocket {
     return this.socket;
   }
 
-  subscribe(event: string, streamName: string, handler: (data: any) => void) {
+  subscribe( streamName: string, handler: (data: any) => void) {
     this.subscriptions.add(streamName);
     this.messageHandlers.set(streamName, handler);
 

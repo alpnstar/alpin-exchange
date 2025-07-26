@@ -11,6 +11,7 @@ export const ordersApi = createApi({
       {
         query: ({ symbol, limit = 100 }) =>
           `depth?symbol=${symbol}&limit=${limit}`,
+        keepUnusedDataFor: 0,
         async onCacheEntryAdded(
           { symbol },
           { cacheDataLoaded, cacheEntryRemoved, dispatch },

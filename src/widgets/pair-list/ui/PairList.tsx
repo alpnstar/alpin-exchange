@@ -3,6 +3,7 @@ import React from "react";
 import { useGetTickersQuery } from "@/entities/tickers/model/tickersApi";
 import { useAppSelector } from "@/shared/lib/hooks/useRedux";
 import { formatNumberWithCommas } from "@/shared/lib/formatters";
+import Link from "next/link";
 
 export const PairListTableRow: React.FC<{
   price: string;
@@ -10,17 +11,22 @@ export const PairListTableRow: React.FC<{
   percent: string;
 }> = ({ price, symbol, percent }) => {
   return (
-    <li className={`relative flex py-1 text-right text-xs`}>
-      <span className={`z-10 flex-grow basis-0 text-left`}>{symbol}</span>
-      <span className="z-10 flex-grow basis-0 text-right">
-        {formatNumberWithCommas(+price)}
-      </span>
-      <span
-        className={`z-10 flex-grow basis-0 text-right ${Math.sign(+percent) === 1 ? "text-buy" : "text-sell"}`}
-      >
-        {percent}%
-      </span>
+    <Link href={`/trade/${symbol}`}>
+
+    <li
+      className={`hover:bg-bg3 relative flex py-1 text-right text-xs transition-colors duration-100 hover:cursor-pointer`}
+    >
+        <span className={`z-10 flex-grow basis-0 text-left`}>{symbol}</span>
+        <span className="z-10 flex-grow basis-0 text-right">
+          {formatNumberWithCommas(+price)}
+        </span>
+        <span
+          className={`z-10 flex-grow basis-0 text-right ${Math.sign(+percent) === 1 ? "text-buy" : "text-sell"}`}
+        >
+          {percent}%
+        </span>
     </li>
+      </Link>
   );
 };
 

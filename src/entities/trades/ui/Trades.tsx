@@ -20,7 +20,7 @@ export const TradesTableRow: React.FC<any> = ({
   type = "bids",
 }) => {
   return (
-    <li className={`relative flex p-1 text-right text-xs`}>
+    <li className={`relative flex py-1 text-right text-xs`}>
       <span
         className={`z-10 flex-grow basis-0 text-left ${type === "bids" ? "text-buy" : "text-sell"}`}
       >
@@ -73,13 +73,10 @@ export const Trades: FC<{ className?: string; listHeight?: string }> = ({
 
   return (
     <div
-      className={cn(
-        "bg-bg flex grow basis-0 flex-col rounded-md px-4",
-        className,
-      )}
+      className={cn("bg-bg flex grow basis-0 flex-col rounded-md", className)}
     >
       <Tabs className="flex grow basis-0 flex-col" defaultValue="Market Trades">
-        <TabsList className="mb-1 hidden gap-4 md:flex">
+        <TabsList className="mb-1 hidden gap-4 px-4 md:flex">
           <TabsTrigger value={"Market Trades"}>Market Trades</TabsTrigger>
           <TabsTrigger value={"My Trades"}>My Trades</TabsTrigger>
         </TabsList>
@@ -87,12 +84,15 @@ export const Trades: FC<{ className?: string; listHeight?: string }> = ({
           className="flex grow basis-0 flex-col"
           value={"Market Trades"}
         >
-          <div className="flex p-1 text-xs text-gray-500">
+          <div className="flex px-4 py-1 text-xs text-gray-500">
             <span className="flex-grow basis-0 text-left">Price (USDT)</span>
             <span className="flex-grow basis-0 text-right">Amount (BTC)</span>
             <span className="flex-grow basis-0 text-right">Time</span>
           </div>
-          <div ref={listRef} className="grow basis-0 overflow-y-scroll">
+          <div
+            ref={listRef}
+            className="custom-scrollbar grow basis-0 overflow-y-scroll pr-2.5 pl-4"
+          >
             <ul>
               {trades.map((item) => (
                 <TradesTableRow

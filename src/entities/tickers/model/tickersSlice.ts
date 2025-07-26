@@ -7,7 +7,7 @@ import { tickersApi } from "@/entities/tickers/model/tickersApi";
 import { mapBinanceStreamTo24HrTickerStatistics } from "@/entities/instrument/lib/mappers";
 
 interface TickersState {
-  tickers: any;
+  tickers: Binance24HrTickerStatistics[];
   ticker: Binance24HrTickerStatistics | null;
 }
 

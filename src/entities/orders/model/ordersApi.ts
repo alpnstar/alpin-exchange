@@ -23,7 +23,6 @@ export const ordersApi = createApi({
 
             binanceWebSocket.connect();
             binanceWebSocket.subscribe(
-              "depthUpdate",
               streamName,
               (data: OrderbookUpdate) => {
                 dispatch(handleOrdersUpdate({ ...data, symbol }));

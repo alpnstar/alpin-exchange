@@ -21,7 +21,6 @@ export const tradesApi = createApi({
 
           binanceWebSocket.connect();
           binanceWebSocket.subscribe(
-            { symbol, event: "aggTrade" },
             streamName,
             (data: AggTradeStream) => {
               dispatch(handleTradesUpdate(data));

@@ -25,7 +25,6 @@ export const tickersApi = createApi({
 
           binanceWebSocket.connect();
           binanceWebSocket.subscribe(
-            "24hrTicker",
             streamName,
             (data: Binance24HrTickerStatisticsStream) => {
               dispatch(setTickerByStream(data));

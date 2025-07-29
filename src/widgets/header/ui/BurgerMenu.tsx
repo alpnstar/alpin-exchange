@@ -4,11 +4,13 @@ import React from "react";
 interface BurgerMenuProps {
   children: React.ReactNode;
   trigger: React.ReactNode;
+  open?: boolean;
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const BurgerMenu = ({ children, trigger }: BurgerMenuProps) => {
+export const BurgerMenu = ({ children, trigger, open, setOpen }: BurgerMenuProps) => {
   return (
-    <Dialog.Root>
+    <Dialog.Root open={open} onOpenChange={setOpen}  >
       <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Content className="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out bg-bg6 fixed top-0 left-0 z-50 h-screen w-screen max-w-md rounded-md p-6 duration-400">

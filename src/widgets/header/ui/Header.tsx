@@ -1,5 +1,5 @@
 "use client";
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { Logo } from "@/shared/ui/logo";
 import { BurgerSvg, FaqSvg, ParamsSvg } from "@/shared/ui/icon";
 import { BurgerMenu } from "@/widgets/header/ui/BurgerMenu";
@@ -10,6 +10,7 @@ import { ToSignInButton } from "@/features/login";
 import { SearchDesktop } from "@/features/coin-search/ui/SearchDesktop";
 
 export const Header: FC = ({}) => {
+  const [open, setopen] =useState(false);
   return (
     <div className="bg-bg1 w-full px-6 py-4">
       <div className="mx-auto flex items-center justify-between">
@@ -84,6 +85,8 @@ export const Header: FC = ({}) => {
           </div>
 
           <BurgerMenu
+            open={open}
+            setOpen={setopen}
             trigger={
               <div className="md:hidden">
                 <BurgerSvg />
@@ -96,7 +99,7 @@ export const Header: FC = ({}) => {
                 <ToSignUpButton width="w-full" className="w-full py-3" />
               </div>
             </div>
-            <SearchMobile />
+            <SearchMobile burger={open} setBurger={setopen} />
           </BurgerMenu>
           <div className="flex items-center gap-3">
             <button className="hidden xl:block" aria-label="FAQ">

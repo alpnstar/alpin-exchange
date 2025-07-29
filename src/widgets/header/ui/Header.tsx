@@ -4,10 +4,10 @@ import { Logo } from "@/shared/ui/logo";
 import { BurgerSvg, FaqSvg, ParamsSvg } from "@/shared/ui/icon";
 import { BurgerMenu } from "@/widgets/header/ui/BurgerMenu";
 import { ToSignUpButton } from "@/features/registration";
-import { SearchMobile } from "@/features/search-coin";
+import { SearchMobile } from "@/features/coin-search";
 import { ToSignInButton } from "@/features/login";
 
-import { SearchDesktop } from "@/features/search-coin/ui/SearchDesktop";
+import { SearchDesktop } from "@/features/coin-search/ui/SearchDesktop";
 
 export const Header: FC = ({}) => {
   return (

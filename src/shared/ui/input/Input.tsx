@@ -6,10 +6,7 @@ import { cn } from "@/shared/lib/cn";
 
 const inputContainerVariants = cva(
   [
-    "text-PrimaryText border-InputLine selection:bg-PrimaryYellow",
-    "flex items-center w-full rounded-md border bg-transparent",
-    "transition-colors duration-300 outline-none cursor-text",
-    "focus-within:border-PrimaryYellow",
+    "text-PrimaryText border-InputLine selection:bg-PrimaryYellow flex items-center w-full rounded-md border bg-transparent transition-colors duration-300 outline-none cursor-text focus-within:border-PrimaryYellow",
   ],
   {
     variants: {
@@ -32,11 +29,7 @@ const inputContainerVariants = cva(
 
 const inputElementVariants = cva(
   [
-    "flex-1 bg-transparent outline-none border-none",
-    "min-w-0",
-    "placeholder:text-TertiaryText placeholder:font-medium placeholder:text-[13px] md:placeholder:text-[14px]",
-    "caret-PrimaryYellow",
-    "leading-normal",
+    "flex-1 bg-transparent outline-none border-none min-w-0 placeholder:text-TertiaryText placeholder:font-medium placeholder:text-[13px] md:placeholder:text-[14px] caret-PrimaryYellow leading-normal",
   ],
   {
     variants: {
@@ -75,21 +68,38 @@ const iconContainerVariants = cva("flex-shrink-0", {
   },
 });
 
+const iconVariants = cva("text-PrimaryText flex items-center justify-center", {
+  variants: {
+    size: {
+      sm: "w-4 h-4",
+      md: "w-5 h-5",
+      lg: "w-8 h-8",
+    },
+  },
+  defaultVariants: {
+    size: "md",
+  },
+});
 type InputContainerVariants = VariantProps<typeof inputContainerVariants>;
 
 export interface InputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size">,
     Pick<InputContainerVariants, "size"> {
+  value?: string;
+  setValue?: React.Dispatch<React.SetStateAction<string>>;
   containerClassName?: string;
   inputClassName?: string;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   htmlSize?: number;
+  blurException?: React.RefObject<HTMLInputElement>;
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
   (
     {
+      value,
+      setValue,
       type = "text",
       className,
       containerClassName,
@@ -129,12 +139,14 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               position: "left",
             })}
           >
-            {leftIcon}
+            <span className={iconVariants({ size })}>{leftIcon}</span>
           </div>
         )}
 
         <input
           type={type}
+          value={value || ""}
+          onChange={setValue ? (e) => setValue(e.target.value) : undefined}
           ref={ref}
           data-slot="input"
           disabled={disabled}
@@ -156,7 +168,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               position: "right",
             })}
           >
-            {rightIcon}
+            <span className={iconVariants({ size })}>{rightIcon}</span>
           </div>
         )}
       </div>

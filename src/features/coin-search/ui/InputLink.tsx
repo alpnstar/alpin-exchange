@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { SearchInput } from "@/features/search-coin/ui/SearchInput";
+import { SearchInput } from "@/features/coin-search/ui/SearchInput";
 
 interface IInputLinkProps {
   mobile: boolean;

@@ -4,13 +4,12 @@ import React from "react";
 import { Ticker } from "@/widgets/ticker/ui/Ticker";
 import { Orderbook } from "@/widgets/orderbook";
 import { TradingPanel } from "@/widgets/Trading-panel";
-import { PairList } from "@/widgets/pair-list";
+import { PairList } from "@/features/pair-list";
 import { Trades } from "@/entities/trades";
 import { useIsMobile } from "@/shared/lib/hooks/use-mobile";
 
 export function TradePageClient({ symbol }: { symbol: string }) {
   const isMobile = useIsMobile(768);
-
   return (
     <div>
       <div className="wrapper mt-2">

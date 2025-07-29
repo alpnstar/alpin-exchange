@@ -11,6 +11,7 @@ import {
 import { instrumentlistenerMiddleware } from "@/entities/instrument";
 import { tickersApi } from "@/entities/tickers/model/tickersApi";
 import { tickersSlice } from "@/entities/tickers/model/tickersSlice";
+import { searchApi } from "@/features/coin-search/model/searchApi";
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
     [ordersApi.reducerPath]: ordersApi.reducer,
     [tradesApi.reducerPath]: tradesApi.reducer,
     [tickersApi.reducerPath]: tickersApi.reducer,
+    [searchApi.reducerPath]: searchApi.reducer,
     trades: tradesSlice.reducer,
     instrument: instrumentSlice.reducer,
     orders: ordersSlice.reducer,
@@ -29,6 +31,7 @@ export const store = configureStore({
       .concat(ordersApi.middleware)
       .concat(tradesApi.middleware)
       .concat(tickersApi.middleware)
+      .concat(searchApi.middleware)
       .prepend(instrumentlistenerMiddleware.middleware)
       .prepend(ordersListenerMiddleware.middleware),
 });

@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react";
 import { Popup } from "@/shared/ui/popup";
 import { SearchIcon } from "@/shared/ui/icon";
-import { SearchContent } from "@/features/search-coin/ui/SearchContent";
+import { SearchContent } from "@/features/coin-search/ui/SearchContent";
 
 export const SearchDesktop: FC = ({}) => {
   const [open, setOpen] = useState<boolean>(false);

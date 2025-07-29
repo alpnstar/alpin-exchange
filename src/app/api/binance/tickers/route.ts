@@ -1,34 +1,26 @@
 import { NextResponse } from "next/server";
-import { Binance24HrTickerStatistics } from "@/entities/tickers/model/types";
+import { getCachedTickers } from "@/shared/api/tickersCache";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
-  const filterSymbol = searchParams.get("symbol")?.toUpperCase() || "USDT";
-  const limit = parseInt(searchParams.get("limit") || "100", 10);
+  const filterSymbol = searchParams.get("symbol")?.toUpperCase();
+  const limit = searchParams.get("limit") ? Number(searchParams.get("limit")) : undefined;
 
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BINANCE_REST_API_URL}/ticker/24hr`,
-    );
+    const data = await getCachedTickers();
 
-    if (!res.ok) {
-      const errorData = await res.json();
-      return NextResponse.json(errorData, { status: res.status });
-    }
-
-    const data: Binance24HrTickerStatistics[] = await res.json();
-
-    let filtered = data.filter(
-      (item) =>
-        item.symbol.endsWith(filterSymbol) &&
-        parseFloat(item.priceChangePercent) !== 0,
-    );
+    let filtered = filterSymbol
+      ? data.filter(
+          (item) => item.symbol.endsWith(filterSymbol) /*&&
+        parseFloat(item.priceChangePercent) !== 0,*/,
+        )
+      : data;
 
     filtered = filtered.sort(
       (a, b) => parseFloat(b.volume) - parseFloat(a.volume),
     );
-    filtered = filtered.slice(0, limit);
+    if (limit)  filtered = filtered.slice(0, limit);
 
     filtered = filtered.sort((a, b) => a.symbol.localeCompare(b.symbol));
 

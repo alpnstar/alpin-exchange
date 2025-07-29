@@ -41,9 +41,7 @@ export const tickersSlice = createSlice({
     builder.addMatcher(
       tickersApi.endpoints.getTickers.matchFulfilled,
       (state, action) => {
-        state.tickers = action.payload
-          .filter((t) => +t.priceChangePercent !== 0)
-          .slice(0, 500);
+        state.tickers = action.payload;
       },
     );
   },

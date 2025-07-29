@@ -1,35 +1,37 @@
-import React, { FC, useState, useRef, useEffect } from "react";
+import React, { FC, useRef } from "react";
 import { Input, InputProps } from "@/shared/ui/input";
 import { cn } from "@/shared/lib/cn";
 import { SearchIcon } from "@/shared/ui/icon/ui/SearchIcon";
 
-export interface SearchBarProps extends InputProps {
+export interface SearchBarProps extends Partial<InputProps> {
+  inputValue: string;
+  setInputValue: React.Dispatch<React.SetStateAction<string>>;
   cancelVariant?: "onFocus" | "persistent";
   onCancelClick?: () => void;
+  isFocused: boolean;
+  setIsFocused: (value: boolean) => void;
+  blurException?: React.RefObject<HTMLInputElement>;
 }
 
 export const SearchBar: FC<SearchBarProps> = ({
   className,
   cancelVariant = "onFocus",
   onCancelClick,
+  inputValue,
+  setInputValue,
+  isFocused,
+  setIsFocused,
   ...props
 }) => {
-  const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const blurTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleFocus = () => {
-    if (blurTimeoutRef.current) {
-      clearTimeout(blurTimeoutRef.current);
-    }
     setIsFocused(true);
   };
 
   const handleBlur = () => {
     if (cancelVariant === "onFocus") {
-      blurTimeoutRef.current = setTimeout(() => {
         setIsFocused(false);
-      }, 150);
     }
   };
 
@@ -46,41 +48,35 @@ export const SearchBar: FC<SearchBarProps> = ({
     e.preventDefault();
   };
 
-  useEffect(() => {
-    return () => {
-      if (blurTimeoutRef.current) {
-        clearTimeout(blurTimeoutRef.current);
-      }
-    };
-  }, []);
 
   const showCancel = cancelVariant === "persistent" || isFocused;
 
   return (
-    <div className={cn("flex w-full items-center gap-2", className)}>
-      <div className="min-w-0 flex-grow">
+    <div className={cn("flex relative w-full items-center gap-2", className)}>
+      <div className="-mr-2 min-w-0 flex-grow basis-0">
         <Input
           {...props}
           ref={inputRef}
+          value={inputValue}
+          setValue={setInputValue}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          leftIcon={<SearchIcon className="fill-[#848E9C]" />}
-          placeholder="Coin, Function, Announcement"
+          leftIcon={<SearchIcon className="w-full h-full fill-TertiaryText" />}
+          placeholder="Search"
         />
       </div>
       <div
         className={cn(
-          "flex-shrink-0 transition-all duration-300 ease-in-out",
-          showCancel ? "w-[60px] opacity-100" : "w-0 opacity-0",
+          " flex-shrink-0 transition-all duration-300 ease-in-out",
+          showCancel ? " w-[60px] opacity-100" : "w-0 opacity-0",
         )}
       >
         <button
           onClick={handleCancelClick}
           onMouseDown={handleCancelMouseDown}
           tabIndex={showCancel ? 0 : -1}
-          style={{ color: "var(--color-PrimaryYellow)" }}
           className={cn(
-            "m-0 w-full border-none bg-transparent p-0 text-center font-medium transition-colors duration-200 hover:text-yellow-400",
+            "m-0 ml-2 w-full cursor-pointer border-none bg-transparent p-0 text-center font-medium text-PrimaryYellow transition-colors duration-200 hover:text-primaryHover",
             !showCancel && "pointer-events-none",
           )}
         >

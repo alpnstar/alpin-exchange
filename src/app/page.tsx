@@ -1,6 +1,6 @@
 import React from "react";
 import { ToSignUpButton } from "@/features/registration";
-import { PairList } from "@/widgets/pair-list";
+import { PairList } from "@/features/pair-list";
 import { Button } from "@/shared/ui/button";
 import Link from "next/link";
 import { ShieldCheck, BarChartBig, Globe } from "lucide-react";

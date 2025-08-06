@@ -8,7 +8,7 @@ interface ISearchContentProps {
 
 export const SearchContent: FC<ISearchContentProps> = ({ setOpen }) => {
   const [isFocused, setIsFocused] = useState(false);
-  const [query, setQuery] = useState<string>('');
+  const [query, setQuery] = useState<string>("");
   return (
     <div>
       <SearchBar

@@ -1,9 +1,9 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { BinanceKline } from "@/entities/instrument/model/types";
+import { BinanceKline } from "@/entities/instrument";
 
 export const instrumentApi = createApi({
   reducerPath: "instrumentApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "/api/binance/" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "/api/binance/public" }),
   tagTypes: [],
   endpoints: (builder) => ({
     getCandles: builder.query<

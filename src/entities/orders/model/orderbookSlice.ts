@@ -1,18 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { OrderbookData, OrderbookUpdate } from "./types";
-import { ordersApi } from "./ordersApi";
+import { orderbookApi } from "./orderbookApi";
 
-interface OrdersState {
+interface OrderbookState {
   data: OrderbookData | null;
   lastUpdateId: number | null;
 }
 
-const initialState: OrdersState = {
+const initialState: OrderbookState = {
   data: null,
   lastUpdateId: null,
 };
 
-const updateOrders = (
+const updateOrderbook = (
   currentBids: [string, string][],
   currentAsks: [string, string][],
   updates: { b: [string, string][]; a: [string, string][] },
@@ -39,15 +39,15 @@ const updateOrders = (
   return { newBids, newAsks };
 };
 
-export const ordersSlice = createSlice({
-  name: "orders",
+export const orderbookSlice = createSlice({
+  name: "orderbook",
   initialState,
   reducers: {
-    resetOrdersState: (state) => {
+    resetOrderbookState: (state) => {
       state.data = null;
       state.lastUpdateId = null;
     },
-    handleOrdersUpdate: (
+    handleOrderbookUpdate: (
       state,
       action: PayloadAction<{ symbol: string } & OrderbookUpdate>,
     ) => {
@@ -59,7 +59,7 @@ export const ordersSlice = createSlice({
         update.U <= state.lastUpdateId + 1 &&
         update.u >= state.lastUpdateId + 1
       ) {
-        const { newBids, newAsks } = updateOrders(
+        const { newBids, newAsks } = updateOrderbook(
           state.data.bids,
           state.data.asks,
           { b: update.b, a: update.a },
@@ -72,7 +72,7 @@ export const ordersSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addMatcher(
-      ordersApi.endpoints.getOrders.matchFulfilled,
+      orderbookApi.endpoints.getOrders.matchFulfilled,
       (state, action: PayloadAction<OrderbookData>) => {
         state.data = action.payload;
         state.lastUpdateId = action.payload.lastUpdateId;
@@ -81,4 +81,4 @@ export const ordersSlice = createSlice({
   },
 });
 
-export const { handleOrdersUpdate } = ordersSlice.actions;
+export const { handleOrderbookUpdate } = orderbookSlice.actions;

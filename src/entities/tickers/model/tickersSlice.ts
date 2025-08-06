@@ -3,8 +3,8 @@ import {
   Binance24HrTickerStatistics,
   Binance24HrTickerStatisticsStream,
 } from "@/entities/tickers/model/types";
-import { tickersApi } from "@/entities/tickers/model/tickersApi";
-import { mapBinanceStreamTo24HrTickerStatistics } from "@/entities/instrument/lib/mappers";
+import { tickersApi } from "@/entities/tickers";
+import { mapBinanceStreamTo24HrTickerStatistics } from "@/entities/instrument";
 
 interface TickersState {
   tickers: Binance24HrTickerStatistics[];

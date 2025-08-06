@@ -31,7 +31,7 @@ export const SearchBar: FC<SearchBarProps> = ({
 
   const handleBlur = () => {
     if (cancelVariant === "onFocus") {
-        setIsFocused(false);
+      setIsFocused(false);
     }
   };
 
@@ -48,11 +48,10 @@ export const SearchBar: FC<SearchBarProps> = ({
     e.preventDefault();
   };
 
-
   const showCancel = cancelVariant === "persistent" || isFocused;
 
   return (
-    <div className={cn("flex relative w-full items-center gap-2", className)}>
+    <div className={cn("relative flex w-full items-center gap-2", className)}>
       <div className="-mr-2 min-w-0 flex-grow basis-0">
         <Input
           {...props}
@@ -61,14 +60,14 @@ export const SearchBar: FC<SearchBarProps> = ({
           setValue={setInputValue}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          leftIcon={<SearchIcon className="w-full h-full fill-TertiaryText" />}
+          leftIcon={<SearchIcon className="fill-TertiaryText h-full w-full" />}
           placeholder="Search"
         />
       </div>
       <div
         className={cn(
-          " flex-shrink-0 transition-all duration-300 ease-in-out",
-          showCancel ? " w-[60px] opacity-100" : "w-0 opacity-0",
+          "flex-shrink-0 transition-all duration-300 ease-in-out",
+          showCancel ? "w-[60px] opacity-100" : "w-0 opacity-0",
         )}
       >
         <button
@@ -76,7 +75,7 @@ export const SearchBar: FC<SearchBarProps> = ({
           onMouseDown={handleCancelMouseDown}
           tabIndex={showCancel ? 0 : -1}
           className={cn(
-            "m-0 ml-2 w-full cursor-pointer border-none bg-transparent p-0 text-center font-medium text-PrimaryYellow transition-colors duration-200 hover:text-primaryHover",
+            "text-PrimaryYellow hover:text-primaryHover m-0 ml-2 w-full cursor-pointer border-none bg-transparent p-0 text-center font-medium transition-colors duration-200",
             !showCancel && "pointer-events-none",
           )}
         >

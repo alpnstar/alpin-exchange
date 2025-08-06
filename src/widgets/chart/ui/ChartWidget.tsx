@@ -3,12 +3,12 @@
 import { CandleChart } from "@/shared/ui/charts";
 import { cn } from "@/shared/lib/cn";
 import { useState } from "react";
-import { useGetCandlesQuery } from "@/entities/instrument/model/instrumentApi";
+import { useGetCandlesQuery } from "@/entities/instrument";
 import { useAppSelector } from "@/shared/lib/hooks/useRedux";
 
 interface ChartWidgetProps {
   className?: string;
-  symbol?: string;
+  symbol?: string[];
   interval?: string;
 }
 
@@ -25,10 +25,7 @@ const enum ChartInterval {
   FifteenMinutes = "15m",
 }
 
-export function ChartWidget({
-  className,
-  symbol = '',
-}: ChartWidgetProps) {
+export function ChartWidget({ className, symbol = [] }: ChartWidgetProps) {
   const [currentChart /*, setCurrentChart*/] = useState<ChartType>(
     ChartType.Candlestick,
   );
@@ -37,7 +34,7 @@ export function ChartWidget({
   );
 
   const { isLoading, error } = useGetCandlesQuery({
-    symbol: symbol,
+    symbol: symbol.join(""),
     interval: currentInterval,
   });
   const candlestickData = useAppSelector((state) => state.instrument.candles);

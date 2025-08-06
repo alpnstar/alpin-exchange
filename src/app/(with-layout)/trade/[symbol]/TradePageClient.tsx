@@ -1,15 +1,18 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Ticker } from "@/widgets/ticker/ui/Ticker";
 import { Orderbook } from "@/widgets/orderbook";
 import { TradingPanel } from "@/widgets/Trading-panel";
 import { PairList } from "@/features/pair-list";
 import { Trades } from "@/entities/trades";
 import { useIsMobile } from "@/shared/lib/hooks/use-mobile";
+import OrderForm from "@/features/make-order/ui/OrderForm";
 
-export function TradePageClient({ symbol }: { symbol: string }) {
+export function TradePageClient({ symbol }: { symbol: string[] }) {
   const isMobile = useIsMobile(768);
+  useEffect(() => {}, []);
+
   return (
     <div>
       <div className="wrapper mt-2">
@@ -18,7 +21,7 @@ export function TradePageClient({ symbol }: { symbol: string }) {
           {!isMobile && <Orderbook symbol={symbol} />}
           <TradingPanel symbol={symbol} />
           <div className="bg-bg hidden rounded-md p-2 md:row-start-2 md:row-end-4 md:block lg:col-start-2 lg:row-start-3 lg:row-end-auto">
-            <p>Trade Form</p>
+            <OrderForm symbol={symbol} />
           </div>
 
           <div className="hidden flex-col gap-2 md:flex lg:row-start-1 lg:row-end-4">

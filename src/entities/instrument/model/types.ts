@@ -1,76 +1,82 @@
-// Тип данных, как он приходит от Binance API
+/**
+ * @description
+ * Представляет собой данные одной свечи (Kline/Candlestick), как они приходят от REST API Binance.
+ * Это кортеж (массив с фиксированным порядком и типами элементов).
+ *
+ * @see https://binance-docs.github.io/apidocs/spot/en/#kline-candlestick-data
+ *
+ * @example
+ * [
+ *   1499040000000,      // 0: Open time (Время открытия)
+ *   "0.01634790",       // 1: Open (Цена открытия)
+ *   "0.80000000",       // 2: High (Максимальная цена)
+ *   "0.01575800",       // 3: Low (Минимальная цена)
+ *   "0.01577100",       // 4: Close (Цена закрытия)
+ *   "148976.11427815",  // 5: Volume (Объем в базовом активе)
+ *   1499644799999,      // 6: Close time (Время закрытия)
+ *   "2434.19055334",    // 7: Quote asset volume (Объем в котируемом активе)
+ *   308,                // 8: Number of trades (Количество сделок)
+ *   "1756.87402397",    // 9: Taker buy base asset volume (Объем тейкер-покупок в базовом активе)
+ *   "28.46694368",      // 10: Taker buy quote asset volume (Объем тейкер-покупок в котируемом активе)
+ *   "17928899.62484339" // 11: Ignore (Игнорируется)
+ * ]
+ */
 export type BinanceKline = [
-  number, // Open time
-  string, // Open
-  string, // High
-  string, // Low
-  string, // Close
-  string, // Volume
-  number, // Close time
-  string, // Quote asset volume
-  number, // Number of trades
-  string, // Taker buy base asset volume
-  string, // Taker buy quote asset volume
-  string, // Ignore
+  number, // 0: Open time
+  string, // 1: Open
+  string, // 2: High
+  string, // 3: Low
+  string, // 4: Close
+  string, // 5: Volume
+  number, // 6: Close time
+  string, // 7: Quote asset volume
+  number, // 8: Number of trades
+  string, // 9: Taker buy base asset volume
+  string, // 10: Taker buy quote asset volume
+  string, // 11: Ignore
 ];
 
+/**
+ * @interface BinanceStreamKline
+ * @description Представляет собой данные одной свечи из WebSocket потока.
+ * @see https://binance-docs.github.io/apidocs/spot/en/#kline-candlestick-streams
+ */
 export interface BinanceStreamKline {
+  /**
+   * @property {number} t - Время начала свечи (timestamp).
+   */
   t: number; // Kline start time
+  /**
+   * @property {number} T - Время окончания свечи (timestamp).
+   */
   T: number; // Kline close time
+  /**
+   * @property {string} s - Символ (торговая пара).
+   */
   s: string; // Symbol
+  /**
+   * @property {string} i - Интервал свечи (e.g., "1m", "5m").
+   */
   i: string; // Interval
+  /**
+   * @property {string} o - Цена открытия.
+   */
   o: string; // Open price
+  /**
+   * @property {string} c - Цена закрытия.
+   */
   c: string; // Close price
+  /**
+   * @property {string} h - Максимальная цена.
+   */
   h: string; // High price
+  /**
+   * @property {string} l - Минимальная цена.
+   */
   l: string; // Low price
+  /**
+   * @property {boolean} x - Является ли эта свеча закрытой.
+   */
   x: boolean; // Is this kline closed?
 }
 
-export type Binance24HrTickerStatistics = {
-  symbol: string;
-  priceChange: string;
-  priceChangePercent: string;
-  weightedAvgPrice: string;
-  prevClosePrice: string;
-  lastPrice: string;
-  lastQty: string;
-  bidPrice: string;
-  bidQty: string;
-  askPrice: string;
-  askQty: string;
-  openPrice: string;
-  highPrice: string;
-  lowPrice: string;
-  volume: string;
-  quoteVolume: string;
-  openTime: number;
-  closeTime: number;
-  firstId: number;
-  lastId: number;
-  count: number;
-};
-export type Binance24HrTickerStatisticsStream = {
-  e: "24hrTicker"; // Event type
-  E: number; // Event time
-  s: string; // Symbol
-  p: string; // Price change
-  P: string; // Price change percent
-  w: string; // Weighted average price
-  x: string; // First trade(F)-1 price (first trade before the 24hr rolling window)
-  c: string; // Last price
-  Q: string; // Last quantity
-  b: string; // Best bid price
-  B: string; // Best bid quantity
-  a: string; // Best ask price
-  A: string; // Best ask quantity
-  o: string; // Open price
-  h: string; // High price
-  l: string; // Low price
-  v: string; // Total traded base asset volume
-  q: string; // Total traded quote asset volume
-  O: number; // Statistics open time
-  C: number; // Statistics close time
-  F: number; // First trade ID
-  L: number; // Last trade Id
-  n: number; // Total number of trades
-};

@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import { useAppSelector } from "@/shared/lib/hooks/useRedux";
 import { formatNumberWithCommas } from "@/shared/lib/formatters";
 import { usePrevious } from "@/shared/lib/hooks/usePrevious";
-import { useGetTickerQuery } from "@/entities/tickers/model/tickersApi";
+import { useGetTickerQuery } from "@/entities/tickers";
 
 interface TickerStatProps {
   label: string;
@@ -23,8 +23,8 @@ const TickerStat: FC<TickerStatProps> = ({
   </div>
 );
 
-export const Ticker: FC<{ symbol: string }> = ({ symbol }) => {
-  const { isLoading, isError } = useGetTickerQuery({ symbol });
+export const Ticker: FC<{ symbol: string[] }> = ({ symbol }) => {
+  const { isLoading, isError } = useGetTickerQuery({ symbol: symbol.join("") });
   const data = useAppSelector((state) => state.tickers.ticker);
   const prevLastPrice = usePrevious(data?.lastPrice);
   const lastPriceColor =
@@ -50,7 +50,7 @@ export const Ticker: FC<{ symbol: string }> = ({ symbol }) => {
           <div className="flex flex-col md:flex-row">
             <div>
               <h1 className="text-[20px] font-medium md:text-xl">
-                {data.symbol}
+                {symbol[0]}/{symbol[1]}
               </h1>
             </div>
             <div className={`text-[28px] md:ml-5 md:text-xl ${lastPriceColor}`}>

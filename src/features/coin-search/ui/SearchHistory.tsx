@@ -1,4 +1,3 @@
-
 "use client";
 
 "use client";
@@ -10,9 +9,7 @@ interface SearchHistoryProps {
   isVisible: boolean;
 }
 
-export const SearchHistory: React.FC<SearchHistoryProps> = ({
-  isVisible,
-}) => {
+export const SearchHistory: React.FC<SearchHistoryProps> = ({ isVisible }) => {
   const [history, setHistory] = useState<string[]>([]);
 
   useEffect(() => {
@@ -38,7 +35,7 @@ export const SearchHistory: React.FC<SearchHistoryProps> = ({
       onMouseDown={(e) => {
         e.preventDefault();
       }}
-      className="bg-bg absolute inset-0 z-20 h-full w-full mt-2.5 px-4 pt-12"
+      className="bg-bg absolute inset-0 z-20 mt-2.5 h-full w-full px-4 pt-12"
     >
       <div className="flex items-center justify-between">
         <span className="font-medium">Search History</span>
@@ -64,7 +61,7 @@ export const SearchHistory: React.FC<SearchHistoryProps> = ({
               key={item}
               className="bg-Input inline-block cursor-pointer rounded-sm px-2.5 py-0.5 text-sm"
             >
-              <Link href={`/trade/${item}`}>{item}</Link>
+              <Link href={`/src/app/(with-layout)/trade/${item}`}>{item}</Link>
             </li>
           ))}
         </ul>
@@ -72,4 +69,3 @@ export const SearchHistory: React.FC<SearchHistoryProps> = ({
     </div>
   );
 };
-

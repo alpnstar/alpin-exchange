@@ -7,7 +7,7 @@ import { useLazySearchQuery } from "@/features/coin-search/model/searchApi";
 import { SearchHistory } from "@/features/coin-search/ui/SearchHistory";
 import { useSearchHistory } from "../lib/hooks/useSearchHistory";
 import { PairListTableRow } from "./PairListTableRow";
-import { Binance24HrTickerStatistics } from "@/entities/tickers/model/types";
+import { Binance24HrTickerStatistics } from "@/entities/tickers";
 
 export const PairList = () => {
   const allTickers = useAppSelector((state) => state.tickers.tickers);

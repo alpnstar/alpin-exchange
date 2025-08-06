@@ -1,19 +1,17 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { binanceWebSocket } from "@/shared/api/binanceWebSocket";
+import { binanceWebSocket } from "@/shared/api";
 import {
   Binance24HrTickerStatistics,
   Binance24HrTickerStatisticsStream,
 } from "@/entities/tickers/model/types";
-import {
-  setTickerByStream,
-} from "@/entities/tickers/model/tickersSlice";
+import { setTickerByStream } from "@/entities/tickers";
 
 export const tickersApi = createApi({
   reducerPath: "tickersApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "/api/binance/" , }),
+  baseQuery: fetchBaseQuery({ baseUrl: "/api/binance" }),
   endpoints: (builder) => ({
     getTicker: builder.query<Binance24HrTickerStatistics, { symbol: string }>({
-      query: ({ symbol }) => `ticker/24hr?symbol=${symbol}`,
+      query: ({ symbol }) => `/public/ticker/24hr?symbol=${symbol}`,
       keepUnusedDataFor: 0,
       async onCacheEntryAdded(
         { symbol },

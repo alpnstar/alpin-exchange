@@ -52,7 +52,7 @@ export const SearchMobile: FC<{
                 setOpen(false);
                 setBurger(false);
               }}
-              href={`/trade/${coin.symbol}`}
+              href={`/src/app/(with-layout)/trade/${coin.symbol}`}
               key={coin.symbol}
             >
               <div

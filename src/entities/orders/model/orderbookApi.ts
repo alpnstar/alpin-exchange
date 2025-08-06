@@ -1,11 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { OrderbookData, OrderbookUpdate } from "./types";
-import { binanceWebSocket } from "@/shared/api/binanceWebSocket";
-import { handleOrdersUpdate } from "@/entities/orders";
+import { binanceWebSocket } from "@/shared/api";
+import { handleOrderbookUpdate } from "@/entities/orders";
 
-export const ordersApi = createApi({
-  reducerPath: "ordersApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "/api/binance/" }),
+export const orderbookApi = createApi({
+  reducerPath: "orderbookApi",
+  baseQuery: fetchBaseQuery({ baseUrl: "/api/binance/public" }),
   endpoints: (builder) => ({
     getOrders: builder.query<OrderbookData, { symbol: string; limit?: number }>(
       {
@@ -22,12 +22,9 @@ export const ordersApi = createApi({
             const streamName = `${symbol.toLowerCase()}@depth`;
 
             binanceWebSocket.connect();
-            binanceWebSocket.subscribe(
-              streamName,
-              (data: OrderbookUpdate) => {
-                dispatch(handleOrdersUpdate({ ...data, symbol }));
-              },
-            );
+            binanceWebSocket.subscribe(streamName, (data: OrderbookUpdate) => {
+              dispatch(handleOrderbookUpdate({ ...data, symbol }));
+            });
 
             await cacheEntryRemoved;
 
@@ -41,4 +38,4 @@ export const ordersApi = createApi({
   }),
 });
 
-export const { useGetOrdersQuery } = ordersApi;
+export const { useGetOrdersQuery } = orderbookApi;

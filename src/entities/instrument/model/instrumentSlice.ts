@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { instrumentApi } from "./instrumentApi";
 import {
-  Binance24HrTickerStatistics,
   BinanceKline,
 } from "@/entities/instrument/model/types";
+import { Binance24HrTickerStatistics } from "@/entities/tickers";
 
 interface InstrumentState {
   candles: BinanceKline[];

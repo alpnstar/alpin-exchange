@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AggTrade, AggTradeStream } from "@/entities/trades/model/types";
-import { tradesApi } from "@/entities/trades/model/tradesApi";
-import { mapAggTradeStreamToAggTrade } from "@/entities/trades/lib/mappers";
+import { AggTrade, AggTradeStream } from "@/entities/trades";
+import { tradesApi } from "@/entities/trades";
+import { mapAggTradeStreamToAggTrade } from "@/entities/trades";
 
 interface TradesState {
   data: AggTrade[];

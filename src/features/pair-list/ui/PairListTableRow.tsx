@@ -1,4 +1,3 @@
-
 import React from "react";
 import Link from "next/link";
 import { formatNumberWithCommas } from "@/shared/lib/formatters";
@@ -14,7 +13,7 @@ export const PairListTableRow: React.FC<{
       className={`hover:bg-bg3 relative text-right text-xs transition-colors duration-100 hover:cursor-pointer`}
       onClick={() => addToSearchHistory(symbol)}
     >
-      <Link href={`/trade/${symbol}`} className="flex py-1">
+      <Link href={`/src/app/(with-layout)/trade/${symbol}`} className="flex py-1">
         <span className={`z-10 flex-grow basis-0 text-left`}>{symbol}</span>
         <span className="z-10 flex-grow basis-0 text-right">
           {formatNumberWithCommas(+price)}

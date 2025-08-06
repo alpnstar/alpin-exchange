@@ -1,4 +1,4 @@
-import { Binance24HrTickerStatistics } from "@/entities/tickers/model/types";
+import { Binance24HrTickerStatistics } from "@/entities/tickers";
 
 const CACHE_TTL = 50000;
 
@@ -14,7 +14,9 @@ const cache: CachedTickers = {
   fetchPromise: null,
 };
 
-export async function getCachedTickers(): Promise<Binance24HrTickerStatistics[]> {
+export async function getCachedTickers(): Promise<
+  Binance24HrTickerStatistics[]
+> {
   const now = Date.now();
 
   if (now - cache.timestamp < CACHE_TTL) {

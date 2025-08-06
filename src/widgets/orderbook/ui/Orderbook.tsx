@@ -9,9 +9,9 @@ export const Orderbook = ({
   symbol,
 }: {
   className?: string;
-  symbol: string;
+  symbol: string[];
 }) => {
-  const { bids, asks, isLoading, isError } = useOrderbook(symbol);
+  const { bids, asks, isLoading, isError } = useOrderbook(symbol.join(""));
 
   return (
     <div

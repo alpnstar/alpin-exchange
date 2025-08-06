@@ -11,11 +11,12 @@ interface PageProps {
 
 export default async function Page({ params }: PageProps) {
   const { symbol } = params;
-  const isSymbolValid = await validateSymbolOnServer(symbol);
+  const splitSymbol = symbol.split("_");
+  const joinedSymbol = splitSymbol.join("");
 
-  if (!isSymbolValid) {
-    notFound();
-  }
+  if (splitSymbol.length !== 2) notFound();
+  const isSymbolValid = await validateSymbolOnServer(joinedSymbol);
+  if (!isSymbolValid) notFound();
 
-  return <TradePageClient symbol={symbol} />;
+  return <TradePageClient symbol={splitSymbol} />;
 }

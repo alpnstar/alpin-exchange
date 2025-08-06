@@ -5,7 +5,9 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
   const filterSymbol = searchParams.get("symbol")?.toUpperCase();
-  const limit = searchParams.get("limit") ? Number(searchParams.get("limit")) : undefined;
+  const limit = searchParams.get("limit")
+    ? Number(searchParams.get("limit"))
+    : undefined;
 
   try {
     const data = await getCachedTickers();
@@ -20,7 +22,7 @@ export async function GET(request: Request) {
     filtered = filtered.sort(
       (a, b) => parseFloat(b.volume) - parseFloat(a.volume),
     );
-    if (limit)  filtered = filtered.slice(0, limit);
+    if (limit) filtered = filtered.slice(0, limit);
 
     filtered = filtered.sort((a, b) => a.symbol.localeCompare(b.symbol));
 

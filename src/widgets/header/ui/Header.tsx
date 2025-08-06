@@ -10,7 +10,7 @@ import { ToSignInButton } from "@/features/login";
 import { SearchDesktop } from "@/features/coin-search/ui/SearchDesktop";
 
 export const Header: FC = ({}) => {
-  const [open, setopen] =useState(false);
+  const [open, setopen] = useState(false);
   return (
     <div className="bg-bg1 w-full px-6 py-4">
       <div className="mx-auto flex items-center justify-between">

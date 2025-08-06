@@ -1,4 +1,4 @@
-import type { AggTrade, AggTradeStream } from "../model/types";
+import { AggTrade, AggTradeStream } from "@/entities/trades";
 
 /**
  * @name mapAggTradeStreamToAggTrade

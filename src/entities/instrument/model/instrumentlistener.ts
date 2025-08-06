@@ -1,22 +1,19 @@
 import { createListenerMiddleware } from "@reduxjs/toolkit";
-import { instrumentSlice } from "@/entities/instrument/model/instrumentSlice";
+import { instrumentSlice } from "@/entities/instrument";
 import { instrumentApi } from "@/entities/instrument/model/instrumentApi";
-import {
-  mapBinanceStreamKlineToBinanceKline,
-  mapBinanceStreamTo24HrTickerStatistics,
-} from "@/entities/instrument/lib/mappers";
+import { mapBinanceStreamKlineToBinanceKline } from "@/entities/instrument";
 import { binanceWebSocket } from "@/shared/api/binanceWebSocket";
 
-export const instrumentlistenerMiddleware = createListenerMiddleware();
+export const instrumentlistener = createListenerMiddleware();
 
-instrumentlistenerMiddleware.startListening({
+instrumentlistener.startListening({
   matcher: instrumentApi.endpoints.getCandles.matchFulfilled,
   effect: async (action, listenerApi) => {
     listenerApi.cancelActiveListeners();
     const { symbol, interval } = action.meta.arg.originalArgs;
     const wsUrl = `${symbol.toLowerCase()}@kline_${interval}`;
     binanceWebSocket.connect();
-    binanceWebSocket.subscribe( wsUrl, (data) => {
+    binanceWebSocket.subscribe(wsUrl, (data) => {
       const newCandleData = mapBinanceStreamKlineToBinanceKline(data.k);
       listenerApi.dispatch(
         instrumentSlice.actions.updateLastCandle(newCandleData),

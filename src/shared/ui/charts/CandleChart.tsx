@@ -15,8 +15,8 @@ import {
   defaultCandlestickSeriesOptions,
   defaultChartOptions,
 } from "@/shared/config/charts";
-import { mapBinanceKlineToCandlestickData } from "@/entities/instrument/lib/mappers";
-import { BinanceKline } from "@/entities/instrument/model/types";
+import { mapBinanceKlineToCandlestickData } from "@/entities/instrument";
+import { BinanceKline } from "@/entities/instrument";
 import { usePrevious } from "@/shared/lib/hooks/usePrevious";
 
 interface ChartComponentProps {

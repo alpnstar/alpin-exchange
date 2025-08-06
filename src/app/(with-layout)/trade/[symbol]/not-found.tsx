@@ -14,7 +14,7 @@ export default function NotFound() {
           supported on Alpin Exchange. Please check the symbol and try again.
         </p>
         <div className="mt-8">
-          <Link href="/">
+          <Link href="/public">
             <Button variant="primary" className="px-6 py-3 text-base">
               Return to Home
             </Button>

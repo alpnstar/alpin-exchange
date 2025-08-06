@@ -1,6 +1,5 @@
+import { Binance24HrTickerStatistics, Binance24HrTickerStatisticsStream } from "@/entities/tickers";
 import {
-  Binance24HrTickerStatistics,
-  Binance24HrTickerStatisticsStream,
   BinanceKline,
   BinanceStreamKline,
 } from "../model/types";

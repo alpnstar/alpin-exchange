@@ -11,7 +11,7 @@ import {
 } from "@/shared/ui/tabs/Tabs";
 import { Trades } from "@/entities/trades/ui/Trades";
 
-export const TradingPanel = ({ symbol }: { symbol: string }) => {
+export const TradingPanel = ({ symbol }: { symbol: string[] }) => {
   return (
     <Tabs
       className="bg-bg flex h-auto flex-col rounded-md md:col-start-2 md:col-end-3 md:row-start-2 lg:col-start-2 lg:col-end-3"

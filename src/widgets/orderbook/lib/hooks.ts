@@ -5,7 +5,7 @@ import { useMemo } from "react";
 
 export const useOrderbook = (symbol: string) => {
   const { isLoading, isError, isFetching } = useGetOrdersQuery({ symbol });
-  const orderbookData = useAppSelector((state) => state.orders.data);
+  const orderbookData = useAppSelector((state) => state.orderbook.data);
   const asks = useMemo(
     () => orderbookData?.asks.slice(0, 15).reverse() || [],
     [orderbookData],

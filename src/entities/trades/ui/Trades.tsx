@@ -1,5 +1,5 @@
 import React, { FC, useLayoutEffect, useRef } from "react";
-import { useGetTradesQuery } from "@/entities/trades/model/tradesApi";
+import { useGetTradesQuery } from "@/entities/trades";
 import { useAppSelector } from "@/shared/lib/hooks/useRedux";
 import {
   formatNumberWithCommas,
@@ -13,16 +13,26 @@ import {
 } from "@/shared/ui/tabs/Tabs";
 import { cn } from "@/shared/lib/cn";
 
-export const TradesTableRow: React.FC<any> = ({
+interface TradesTableRowProps {
+  price: string;
+  quantity: string;
+  time: number;
+  side: "buy" | "sell";
+}
+
+export const TradesTableRow: React.FC<TradesTableRowProps> = ({
   price,
   quantity,
   time,
-  type = "bids",
+  side,
 }) => {
   return (
     <li className={`relative flex py-1 text-right text-xs`}>
       <span
-        className={`z-10 flex-grow basis-0 text-left ${type === "bids" ? "text-buy" : "text-sell"}`}
+        className={cn(
+          "z-10 flex-grow basis-0 text-left",
+          side === "buy" ? "text-buy" : "text-sell",
+        )}
       >
         {formatNumberWithCommas(+price)}
       </span>
@@ -38,10 +48,9 @@ export const TradesTableRow: React.FC<any> = ({
 
 export const Trades: FC<{
   className?: string;
-  listHeight?: string;
-  symbol: string;
-}> = ({ className, listHeight = "282px", symbol }) => {
-  const { isLoading, isError } = useGetTradesQuery({ symbol });
+  symbol: string[];
+}> = ({ className, symbol }) => {
+  const { isLoading, isError } = useGetTradesQuery({ symbol: symbol.join("") });
   const trades = useAppSelector((state) => state.trades.data);
 
   const listRef = useRef<HTMLDivElement>(null);
@@ -86,8 +95,12 @@ export const Trades: FC<{
           value={"Market Trades"}
         >
           <div className="flex px-4 py-1 text-xs text-gray-500">
-            <span className="flex-grow basis-0 text-left">Price (USDT)</span>
-            <span className="flex-grow basis-0 text-right">Amount (BTC)</span>
+            <span className="flex-grow basis-0 text-left">
+              Price ({symbol[1]})
+            </span>
+            <span className="flex-grow basis-0 text-right">
+              Amount ({symbol[0]})
+            </span>
             <span className="flex-grow basis-0 text-right">Time</span>
           </div>
           <div
@@ -95,15 +108,16 @@ export const Trades: FC<{
             className="custom-scrollbar grow basis-0 overflow-y-scroll pr-2.5 pl-4"
           >
             <ul>
-              {trades.map((item) => (
+              {isLoading ? <div>Loading...</div> : isError ? <div>Error</div> : trades.map((item) => (
                 <TradesTableRow
                   key={item.a}
                   price={item.p}
                   time={item.T}
                   quantity={item.q}
-                  type={item.m ? "asks" : "bids"}
+                  side={!item.m ? "buy" : "sell"}
                 />
               ))}
+
             </ul>
           </div>
         </TabsContent>

@@ -1,11 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { binanceWebSocket } from "@/shared/api/binanceWebSocket";
-import { AggTrade, AggTradeStream } from "@/entities/trades/model/types";
-import { handleTradesUpdate } from "@/entities/trades/model/tradesSlice";
+import { AggTrade, AggTradeStream } from "@/entities/trades";
+import { handleTradesUpdate } from "@/entities/trades";
 
 export const tradesApi = createApi({
   reducerPath: "tradesApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "/api/binance/" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "/api/binance/public" }),
   endpoints: (builder) => ({
     getTrades: builder.query<AggTrade[], { symbol: string; limit?: number }>({
       query: ({ symbol, limit = 100 }) =>
@@ -20,12 +20,9 @@ export const tradesApi = createApi({
           const streamName = `${symbol.toLowerCase()}@aggTrade`;
 
           binanceWebSocket.connect();
-          binanceWebSocket.subscribe(
-            streamName,
-            (data: AggTradeStream) => {
-              dispatch(handleTradesUpdate(data));
-            },
-          );
+          binanceWebSocket.subscribe(streamName, (data: AggTradeStream) => {
+            dispatch(handleTradesUpdate(data));
+          });
 
           await cacheEntryRemoved;
 

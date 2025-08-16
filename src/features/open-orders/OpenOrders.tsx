@@ -1,7 +1,8 @@
 import React, { FC, useEffect } from "react";
 import {
-  useCloseAllOrdersMutation, useCloseOrderMutation,
-  useLazyGetOpenOrdersQuery
+  useCloseAllOrdersMutation,
+  useCloseOrderMutation,
+  useLazyGetOpenOrdersQuery,
 } from "@/entities/orders";
 import { useAppSelector } from "@/shared/lib";
 
@@ -36,23 +37,23 @@ export const OpenOrders: FC<IOpenOrdersProps> = ({ symbol }) => {
     <div className="text-TertiaryText w-full text-[12px]">
       {/* Header */}
       <div className="mb-1 flex w-full border-b border-gray-700 pb-1 font-bold">
-        <div className="grow-1 basis-[88px]">Дата</div>
-        <div className="grow-1 basis-[120px]">Пара</div>
-        <div className="grow-1 basis-[110px]">Тип</div>
-        <div className="grow-1 basis-[60px]">Сторона</div>
-        <div className="grow-1 basis-[120px]">Цена</div>
-        <div className="grow-1 basis-[120px]">Количество</div>
-        <div className="grow-1 basis-[100px]">Айсберг</div>
-        <div className="grow-1 basis-[60px]">Заполнено</div>
-        <div className="grow-1 basis-[80px]">Всего</div>
-        <div className="grow-1 basis-[100px]">Условия активации</div>
+        <div className="grow-1 basis-[88px]">Date</div>
+        <div className="grow-1 basis-[120px]">Pair</div>
+        <div className="grow-1 basis-[110px]">Type</div>
+        <div className="grow-1 basis-[60px]">Side</div>
+        <div className="grow-1 basis-[120px]">Price</div>
+        <div className="grow-1 basis-[120px]">Amount</div>
+        <div className="grow-1 basis-[100px]">Amount per Iceberg Order</div>
+        <div className="grow-1 basis-[60px]">Filled</div>
+        <div className="grow-1 basis-[80px]">Total</div>
+        <div className="grow-1 basis-[100px]">Trigger Conditions</div>
         <div className="grow-1 basis-[48px]">SOR</div>
         <div className="grow-1 basis-[48px]">TP/SL</div>
         <div
           onClick={() => closeAllOrders({ symbol: symbol.join("") })}
           className="text-PrimaryYellow grow-1 basis-[100px] cursor-pointer"
         >
-          Отменить все
+          Cancel All
         </div>
       </div>
 
@@ -94,7 +95,9 @@ export const OpenOrders: FC<IOpenOrdersProps> = ({ symbol }) => {
                   ({filledPercent.toFixed(2)}%)
                 </span>
               </div>
-              <div className="grow-1 basis-[80px]">{formatNumber(total)}</div>
+              <div className="grow-1 basis-[80px]">
+                {formatNumber(total) + " " + symbol[1]}
+              </div>
               <div className="grow-1 basis-[100px]">
                 {item.stopPrice && item.stopPrice !== "0"
                   ? formatNumber(item.stopPrice)
@@ -103,7 +106,15 @@ export const OpenOrders: FC<IOpenOrdersProps> = ({ symbol }) => {
               <div className="grow-1 basis-[48px]">-</div>
               <div className="grow-1 basis-[48px]">-</div>
               <div className="grow-1 basis-[100px]">
-                <button onClick={() => cancelOrder({symbol: item.symbol, clientOrderId: item.clientOrderId })} className="rounded bg-red-500 px-2 py-1 text-white cursor-pointer">
+                <button
+                  onClick={() =>
+                    cancelOrder({
+                      symbol: item.symbol,
+                      clientOrderId: item.clientOrderId,
+                    })
+                  }
+                  className="cursor-pointer rounded bg-red-500 px-2 py-1 text-white"
+                >
                   X
                 </button>
               </div>
@@ -112,7 +123,7 @@ export const OpenOrders: FC<IOpenOrdersProps> = ({ symbol }) => {
         })
       ) : (
         <div className="py-4 text-center text-gray-500">
-          Нет открытых ордеров
+          No open orders
         </div>
       )}
     </div>

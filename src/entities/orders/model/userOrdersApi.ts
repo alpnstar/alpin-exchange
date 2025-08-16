@@ -13,7 +13,7 @@ export const userOrdersApi = createApi({
   reducerPath: "userOrdersApi",
   baseQuery: privateApiBaseQuery,
   endpoints: (builder) => ({
-    closeOrder: builder.mutation<any, { symbol: string; clientOrderId: number }>({
+    closeOrder: builder.mutation<any, { symbol: string; clientOrderId: string }>({
       query: ({ clientOrderId, symbol }) => ({
         url: `order?symbol=${symbol}&origClientOrderId=${clientOrderId}`,
         method: "DELETE",

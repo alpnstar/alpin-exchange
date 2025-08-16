@@ -12,9 +12,17 @@ import { updateOpenOrdersByEvent } from "@/entities/orders";
 export const userOrdersApi = createApi({
   reducerPath: "userOrdersApi",
   baseQuery: privateApiBaseQuery,
-  tagTypes: ["UserOrders"],
   endpoints: (builder) => ({
-    closeAllOrders: builder.mutation<any, {symbol:string}>({
+    closeOrder: builder.mutation<any, { symbol: string; clientOrderId: number }>({
+      query: ({ clientOrderId, symbol }) => ({
+        url: `order?symbol=${symbol}&origClientOrderId=${clientOrderId}`,
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+    closeAllOrders: builder.mutation<any, { symbol: string }>({
       query: ({ symbol }) => ({
         url: `openOrders?symbol=${symbol.toUpperCase()}`,
         method: "DELETE",
@@ -22,7 +30,6 @@ export const userOrdersApi = createApi({
           "Content-Type": "application/json",
         },
       }),
-      invalidatesTags: ["UserOrders"],
     }),
     getOpenOrders: builder.query<UserOrder[], { symbol?: string }>({
       query: ({ symbol }) =>
@@ -49,19 +56,9 @@ export const userOrdersApi = createApi({
           console.error(error);
         }
       },
-      providesTags: (result) =>
-        result
-          ? [
-              ...result.map(({ orderId }) => ({
-                type: "UserOrders" as const,
-                id: orderId,
-              })),
-              { type: "UserOrders", id: "LIST" },
-            ]
-          : [{ type: "UserOrders", id: "LIST" }],
     }),
   }),
 });
 
-export const { useLazyGetOpenOrdersQuery, useCloseAllOrdersMutation } =
+export const { useLazyGetOpenOrdersQuery, useCloseAllOrdersMutation, useCloseOrderMutation } =
   userOrdersApi;

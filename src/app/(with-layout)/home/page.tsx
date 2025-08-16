@@ -1,5 +1,5 @@
 import React from "react";
-import { ToSignUpButton } from "@/features/registration";
+import { ToSignInButton } from "@/features/registration";
 import { PairList } from "@/features/pair-list";
 import { Button } from "@/shared/ui/button";
 import Link from "next/link";
@@ -36,7 +36,7 @@ export default function Page() {
             future of finance today.
           </p>
           <div className="mt-8 flex justify-center gap-4">
-            <ToSignUpButton className="px-8 py-6 text-lg" />
+            <toSignInButton className="px-8 py-6 text-lg" />
             <Link href="/src/app/(with-layout)/trade/BTCUSDT">
               <Button variant="secondary" className="px-8 py-6 text-lg">
                 Start Trading
@@ -97,7 +97,7 @@ export default function Page() {
             Create an account in minutes and start your crypto journey with us.
           </p>
           <div className="mt-8">
-            <ToSignUpButton className="px-10 py-6 text-xl" />
+            <toSignInButton className="px-10 py-6 text-xl" />
           </div>
         </div>
       </section>

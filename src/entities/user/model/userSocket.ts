@@ -1,4 +1,10 @@
 import { UserAccountInfoUpdate } from "@/entities/user";
+import { sign } from "tweetnacl";
+import {
+  decodeUTF8,
+  encodeBase64,
+  decodeBase64,
+} from "tweetnacl-util";
 
 export enum UserSocketMethod {
   SESSION_LOGON = "session.logon",
@@ -15,7 +21,8 @@ export class UserSocket {
 
   private socket: WebSocket | null = null;
   private url: string;
-  private apiKey: string;
+  private publicKey: string;
+  private secretKey: string;
   private appUrl: string;
   private logonEventId: number;
   private listeners: Map<string, ((data: {event: UserAccountInfoUpdate}) => void)[]> = new Map();
@@ -25,22 +32,23 @@ export class UserSocket {
   private readonly maxReconnectAttempts = 10;
   private readonly reconnectInterval = 5000; // 5 секунд
 
-  private constructor() {
+  private constructor(publicKey: string, secretKey: string) {
     this.url = process.env.NEXT_PUBLIC_BINANCE_WEBSOCKET_API_URL!;
-    this.apiKey = process.env.NEXT_PUBLIC_BINANCE_API_KEY!;
+    this.publicKey = publicKey;
+    this.secretKey = secretKey;
     this.appUrl = process.env.NEXT_PUBLIC_APP_URL!;
     this.logonEventId = Date.now();
 
-    if (!this.url || !this.apiKey || !this.appUrl) {
+    if (!this.url || !this.publicKey || !this.appUrl) {
       throw new Error(
         "WebSocket environment variables are not configured properly.",
       );
     }
   }
 
-  public static getInstance(): UserSocket {
+  public static getInstance(publicKey: string, secretKey: string): UserSocket {
     if (!UserSocket.instance) {
-      UserSocket.instance = new UserSocket();
+      UserSocket.instance = new UserSocket(publicKey, secretKey);
     }
     return UserSocket.instance;
   }
@@ -103,7 +111,7 @@ export class UserSocket {
     try {
       const authData = await this.getAuthSignature();
       this.sendMessage(UserSocketMethod.SESSION_LOGON, this.logonEventId, {
-        apiKey: this.apiKey,
+        apiKey: this.publicKey,
         timestamp: authData.timestamp,
         signature: authData.signature,
       });
@@ -143,13 +151,35 @@ export class UserSocket {
     signature: string;
     timestamp: number;
   }> {
-    const response = await fetch(`${this.appUrl}/api/binance/ws-auth`, {
-      method: "POST",
-    });
-    if (!response.ok) {
-      throw new Error("Failed to fetch WebSocket auth signature.");
-    }
-    return response.json();
+    const serverTime = await fetch(
+      `${process.env.NEXT_PUBLIC_BINANCE_REST_API_URL}/time`,
+    ).then((res) => res.json());
+
+    const queryString = new URLSearchParams({
+      apiKey: this.publicKey,
+      timestamp: serverTime.serverTime.toString(),
+    }).toString();
+
+    const pem = this.secretKey
+      .replace("-----BEGIN PRIVATE KEY-----", "")
+      .replace("-----END PRIVATE KEY-----", "")
+      .replace(/\n/g, "");
+
+    const der = decodeBase64(pem);
+
+    // The Ed25519 private key is the last 32 bytes of the ASN.1 DER structure.
+    const seed = der.slice(der.length - 32);
+
+    const keyPair = sign.keyPair.fromSeed(seed);
+
+    const signatureBytes = sign.detached(
+      decodeUTF8(queryString),
+      keyPair.secretKey,
+    );
+
+    const signature = encodeBase64(signatureBytes);
+
+    return { signature, timestamp: serverTime.serverTime };
   }
 
   on(event: string, callback: (data: {event:UserAccountInfoUpdate}) => void) {

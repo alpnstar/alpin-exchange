@@ -35,8 +35,8 @@ export const PairList = () => {
         <div className="px-4 py-3">
           <SearchBar
             className="z-30"
-            inputValue={searchQuery}
-            setInputValue={setSearchQuery}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             size="sm"
             isFocused={isFocused}
             setIsFocused={setIsFocused}

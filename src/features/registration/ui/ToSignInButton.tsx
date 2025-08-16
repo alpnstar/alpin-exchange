@@ -18,7 +18,7 @@ export const ToSignInButton: FC<IToSignInButton> = ({
       className={`${width ? width : ""} ${height ? height : ""}`}
       href={"/login"}
     >
-      <Button variant="secondary" className={className}>
+      <Button variant="primary" className={className}>
         Sign In
       </Button>
     </Link>

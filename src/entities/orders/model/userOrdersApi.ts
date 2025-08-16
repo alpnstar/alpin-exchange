@@ -1,26 +1,50 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
 import { UserOrder } from "./types";
-import { UserSocket } from "@/entities/user";
+import {
+  UserAccountInfoUpdate,
+  UserSocket,
+  UserSocketEvent,
+} from "@/entities/user";
+import { privateApiBaseQuery } from "@/shared/api/private-base-query";
+import { RootState } from "@/app/providers/StoreProvider";
+import { updateOpenOrdersByEvent } from "@/entities/orders";
 
 export const userOrdersApi = createApi({
   reducerPath: "userOrdersApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "/api/binance/private" }),
+  baseQuery: privateApiBaseQuery,
   tagTypes: ["UserOrders"],
   endpoints: (builder) => ({
+    closeAllOrders: builder.mutation<any, {symbol:string}>({
+      query: ({ symbol }) => ({
+        url: `openOrders?symbol=${symbol.toUpperCase()}`,
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+      invalidatesTags: ["UserOrders"],
+    }),
     getOpenOrders: builder.query<UserOrder[], { symbol?: string }>({
       query: ({ symbol }) =>
         symbol ? `openOrders?symbol=${symbol.toUpperCase()}` : "openOrders",
       async onCacheEntryAdded(
         { symbol },
-        { cacheDataLoaded, cacheEntryRemoved, dispatch },
+        { cacheDataLoaded, cacheEntryRemoved, dispatch, getState },
       ) {
         try {
           await cacheDataLoaded;
-          const ws = UserSocket.getInstance();
-          ws.connect();
-          ws.on("executionReport", (data: any) => {
-            console.log("executionReport", data);
-          });
+          const state = getState() as RootState;
+          const { publicKey, secretKey } = state.user;
+          if (publicKey !== null && secretKey !== null) {
+            const ws = UserSocket.getInstance(publicKey, secretKey);
+            const handler = (data: { event: UserAccountInfoUpdate }) => {
+              dispatch(updateOpenOrdersByEvent(data));
+            };
+            ws.connect();
+            ws.on(UserSocketEvent.EXECUTION_REPORT, handler);
+            await cacheEntryRemoved;
+            ws.off(UserSocketEvent.EXECUTION_REPORT, handler);
+          }
         } catch (error) {
           console.error(error);
         }
@@ -39,4 +63,5 @@ export const userOrdersApi = createApi({
   }),
 });
 
-export const { useGetOpenOrdersQuery } = userOrdersApi;
+export const { useLazyGetOpenOrdersQuery, useCloseAllOrdersMutation } =
+  userOrdersApi;

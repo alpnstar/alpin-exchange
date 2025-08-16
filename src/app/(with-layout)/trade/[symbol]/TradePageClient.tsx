@@ -8,10 +8,10 @@ import { PairList } from "@/features/pair-list";
 import { Trades } from "@/entities/trades";
 import { useIsMobile } from "@/shared/lib/hooks/use-mobile";
 import OrderForm from "@/features/make-order/ui/OrderForm";
+import { OpenOrders } from "@/features/open-orders/OpenOrders";
 
 export function TradePageClient({ symbol }: { symbol: string[] }) {
   const isMobile = useIsMobile(768);
-  useEffect(() => {}, []);
 
   return (
     <div>
@@ -33,7 +33,7 @@ export function TradePageClient({ symbol }: { symbol: string[] }) {
           </div>
 
           <div className="bg-bg col-start-1 col-end-[-1] rounded-md p-2">
-            <p>Open Orders / Order History</p>
+            <OpenOrders symbol={symbol}/>
           </div>
         </div>
       </div>

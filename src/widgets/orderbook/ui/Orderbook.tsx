@@ -4,6 +4,7 @@ import { useOrderbook } from "../lib/hooks";
 import { OrderbookTable } from "./OrderbookTable";
 import { cn } from "@/shared/lib/cn";
 
+
 export const Orderbook = ({
   className,
   symbol,

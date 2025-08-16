@@ -6,7 +6,7 @@ import { cn } from "@/shared/lib/cn";
 
 const inputContainerVariants = cva(
   [
-    "text-PrimaryText border-InputLine selection:bg-PrimaryYellow flex items-center w-full rounded-md border bg-transparent transition-colors duration-300 outline-none cursor-text focus-within:border-PrimaryYellow",
+    "text-PrimaryText border-InputLine selection:bg-PrimaryYellow flex items-center w-full rounded-md border bg-transparent transition-colors duration-300 outline-none cursor-text focus-within:border-PrimaryYellow px-2",
   ],
   {
     variants: {
@@ -85,8 +85,6 @@ type InputContainerVariants = VariantProps<typeof inputContainerVariants>;
 export interface InputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size">,
     Pick<InputContainerVariants, "size"> {
-  value?: string;
-  setValue?: React.Dispatch<React.SetStateAction<string>>;
   containerClassName?: string;
   inputClassName?: string;
   leftIcon?: React.ReactNode;
@@ -98,8 +96,6 @@ export interface InputProps
 const Input = forwardRef<HTMLInputElement, InputProps>(
   (
     {
-      value,
-      setValue,
       type = "text",
       className,
       containerClassName,
@@ -145,8 +141,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
         <input
           type={type}
-          value={value || ""}
-          onChange={setValue ? (e) => setValue(e.target.value) : undefined}
           ref={ref}
           data-slot="input"
           disabled={disabled}

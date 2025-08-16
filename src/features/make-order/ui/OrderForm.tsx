@@ -1,9 +1,9 @@
 // Иконка стрелки для выпадающих списков
 import SelectTest, { SelectItem } from "@/features/make-order/ui/SelectTest";
 import * as React from "react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useMakeOrderMutation } from "@/features/make-order/model/makeOrderApi";
-import { useGetAccountInfoQuery } from "@/entities/user/model/userApi";
+import { useLazyGetAccountInfoQuery } from "@/entities/user/model/userApi";
 import { useAppSelector } from "@/shared/lib/hooks/useRedux";
 
 // Иконка информации
@@ -47,18 +47,22 @@ const OrderForm = ({ symbol }: { symbol: string[] }) => {
   const [sellInput, setSellInput] = useState<string>("");
 
   const [makeOrder] = useMakeOrderMutation();
-  const { isLoading, isError } = useGetAccountInfoQuery();
-  const user = useAppSelector((state) => state.user.accountInfo);
+  const [getAccountInfo, { data: accountInfo }] = useLazyGetAccountInfoQuery();
+  const user = useAppSelector((state) => state.user);
   const ticker = useAppSelector((state) => state.tickers.ticker);
   const firstBalance = useMemo(
-    () => user?.balances.find((b) => b.asset === symbol[0]),
+    () => user?.accountInfo?.balances.find((b) => b.asset === symbol[0]),
     [user, symbol],
   );
   const secondaryBalance = useMemo(
-    () => user?.balances.find((b) => b.asset === symbol[1]),
+    () => user?.accountInfo?.balances.find((b) => b.asset === symbol[1]),
     [user, symbol],
   );
-
+  useEffect(() => {
+    if (user.secretKey && user.publicKey) {
+      getAccountInfo();
+    }
+  }, [user.secretKey, user.publicKey, getAccountInfo]);
   return (
     <div className="bg-bg mx-auto max-w-4xl rounded-lg p-4 font-sans text-white">
       {/* Вкладки */}
@@ -113,7 +117,7 @@ const OrderForm = ({ symbol }: { symbol: string[] }) => {
             <div className="flex justify-between">
               <span>Avbl</span>
               <span>
-                {secondaryBalance?.free || 0} {symbol[1]}
+                {secondaryBalance?.free || "--"} {symbol[1]}
               </span>
             </div>
             <div className="flex justify-between">
@@ -123,7 +127,7 @@ const OrderForm = ({ symbol }: { symbol: string[] }) => {
               <span>
                 {secondaryBalance && ticker
                   ? +secondaryBalance.free / +ticker.lastPrice
-                  : ""}{" "}
+                  : "--"}{" "}
                 {symbol[0]}
               </span>
             </div>
@@ -184,7 +188,7 @@ const OrderForm = ({ symbol }: { symbol: string[] }) => {
             <div className="flex justify-between">
               <span>Avbl</span>
               <span>
-                {firstBalance?.free || 0} {symbol[0]}
+                {firstBalance?.free || "--"} {symbol[0]}
               </span>
             </div>
             <div className="flex justify-between">
@@ -194,7 +198,7 @@ const OrderForm = ({ symbol }: { symbol: string[] }) => {
               <span>
                 {firstBalance && ticker
                   ? +firstBalance.free * +ticker.lastPrice
-                  : ""}{" "}
+                  : "--"}{" "}
                 {symbol[1]}
               </span>
             </div>

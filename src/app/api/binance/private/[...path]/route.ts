@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import crypto from "crypto";
 import axios, { AxiosError, Method } from "axios";
+import { sign } from "tweetnacl";
+import { decodeBase64, decodeUTF8, encodeBase64 } from "tweetnacl-util";
+import { createErrorResponse } from "@/shared/lib/api-error";
 
-const apiKey = process.env.NEXT_PUBLIC_BINANCE_API_KEY;
-const apiSecret = process.env.BINANCE_SECRET_KEY;
 const testnetBaseUrl = process.env.NEXT_PUBLIC_BINANCE_REST_API_URL;
 
 interface BinanceServerTime {
@@ -17,10 +17,13 @@ interface HandlerContext {
 }
 
 async function handler(request: NextRequest, { params }: HandlerContext) {
+  const apiKey = request.headers.get("X-API-KEY");
+  const apiSecret = request.headers.get("X-SECRET-KEY");
+
   if (!apiKey || !apiSecret) {
-    return NextResponse.json(
-      { error: "API ключи не настроены" },
-      { status: 500 },
+    return createErrorResponse(
+      401,
+      "API ключ и/или секретный ключ отсутствуют в заголовках запроса.",
     );
   }
 
@@ -31,13 +34,9 @@ async function handler(request: NextRequest, { params }: HandlerContext) {
       `${testnetBaseUrl}/time`,
     );
     serverTime = timeResponse.data.serverTime;
-    console.log(`Получено время сервера Binance: ${serverTime}`);
   } catch (error) {
     console.error("Не удалось получить время с сервера Binance:", error);
-    return NextResponse.json(
-      { error: "Ошибка синхронизации времени с Binance" },
-      { status: 500 },
-    );
+    return createErrorResponse(500, "Ошибка синхронизации времени с Binance");
   }
 
   const binancePath = params.path.join("/");
@@ -46,9 +45,14 @@ async function handler(request: NextRequest, { params }: HandlerContext) {
   let body: Record<string, unknown> = {};
 
   if (method === "POST" || method === "PUT" || method === "DELETE") {
-    try {
-      body = await request.json();
-    } catch (e) {}
+    const bodyText = await request.text();
+    if (bodyText) {
+      try {
+        body = JSON.parse(bodyText);
+      } catch (e) {
+        return createErrorResponse(400, "Неверный формат тела запроса.");
+      }
+    }
   }
 
   const allParams: Record<string, string | number> = {};
@@ -62,9 +66,27 @@ async function handler(request: NextRequest, { params }: HandlerContext) {
     timestamp: serverTime.toString(),
   }).toString();
 
-  const signature = crypto
-    .sign(null, Buffer.from(queryString), apiSecret)
-    .toString("base64");
+  let signature: string;
+  try {
+    const pem = apiSecret
+      .replace("-----BEGIN PRIVATE KEY-----", "")
+      .replace("-----END PRIVATE KEY-----", "")
+      .replace(/\n/g, "");
+
+    const der = decodeBase64(pem);
+    const seed = der.slice(der.length - 32);
+    const keyPair = sign.keyPair.fromSeed(seed);
+    const signatureBytes = sign.detached(
+      decodeUTF8(queryString),
+      keyPair.secretKey,
+    );
+    signature = encodeBase64(signatureBytes);
+  } catch (e) {
+    return createErrorResponse(
+      400,
+      "Неверный формат секретного или публичного ключа.",
+    );
+  }
 
   const finalUrl = `${testnetBaseUrl}/${binancePath}?${queryString}&signature=${signature}`;
   try {
@@ -75,24 +97,26 @@ async function handler(request: NextRequest, { params }: HandlerContext) {
         "X-MBX-APIKEY": apiKey,
         "Content-Type": "application/json",
       },
-      // data: method !== "GET" ? body : undefined,
     });
     return NextResponse.json(response.data, { status: response.status });
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError;
-      console.error("Ошибка API Binance:", axiosError.response?.data);
-      return NextResponse.json(
-        {
-          error: "Ошибка при выполнении запроса к Binance API",
-          details: axiosError.response?.data,
-        },
-        { status: axiosError.response?.status || 500 },
+      console.log(axiosError.response);
+    }
+
+    if (axios.isAxiosError(error) && error.response?.data.code === -1022) {
+      const axiosError = error as AxiosError;
+      return createErrorResponse(
+        500,
+        "Неверные ключи API. Проверьте их и повторите запрос.",
+        undefined,
+        axiosError.code,
       );
     }
-    return NextResponse.json(
-      { error: "Внутренняя ошибка сервера" },
-      { status: 500 },
+    return createErrorResponse(
+      500,
+      "Неизвестная ошибка при выполнении запроса к Binance API",
     );
   }
 }

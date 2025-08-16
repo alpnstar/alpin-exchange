@@ -1,4 +1,5 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import { privateApiBaseQuery } from "@/shared/api/private-base-query";
 
 interface Order {
   symbol: string;
@@ -16,8 +17,8 @@ interface Order {
 
 export const makeOrderApi = createApi({
   reducerPath: "makeOrderApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "/api/binance/private/" }),
-  tagTypes: ["User"], // <--- fix: add "User" as a tag type
+  baseQuery: privateApiBaseQuery,
+  tagTypes: ["User"],
   endpoints: (builder) => ({
     makeOrder: builder.mutation<any, Order>({
       query: ({ symbol, quantity, side, type }) => {
@@ -30,7 +31,9 @@ export const makeOrderApi = createApi({
           body: JSON.stringify({
             symbol: symbol.toUpperCase(),
             side,
-            type,
+            type: "LIMIT",
+            price: 116000,
+            timeInForce: "GTC",
             quantity,
           }),
         };

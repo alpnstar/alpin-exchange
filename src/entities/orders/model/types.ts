@@ -60,6 +60,7 @@ export type OrderbookUpdate = {
  * @interface UserOrder
  * @description Представляет собой один открытый ордер пользователя.
  * Эта структура данных возвращается приватными эндпоинтами REST API.
+ * @see https://developers.binance.com/docs/binance-spot-api-docs/rest-api/trading-endpoints#current-open-orders-user_data
  */
 export interface UserOrder {
   /**
@@ -73,7 +74,7 @@ export interface UserOrder {
   /**
    * @property {number} orderListId - ID списка ордеров (для OCO ордеров), иначе -1.
    */
-  orderListId: number; // or -1
+  orderListId: number;
   /**
    * @property {string} clientOrderId - Пользовательский ID ордера.
    */
@@ -97,7 +98,7 @@ export interface UserOrder {
   /**
    * @property {string} status - Текущий статус ордера (e.g., 'NEW', 'PARTIALLY_FILLED', 'FILLED').
    */
-  status: string; // e.g., 'NEW', 'PARTIALLY_FILLED'
+  status: string;
   /**
    * @property {string} timeInForce - Условие времени действия ордера (e.g., 'GTC', 'IOC', 'FOK').
    */
@@ -105,7 +106,7 @@ export interface UserOrder {
   /**
    * @property {string} type - Тип ордера (e.g., 'LIMIT', 'MARKET').
    */
-  type: string; // e.g., 'LIMIT', 'MARKET'
+  type: string;
   /**
    * @property {"BUY" | "SELL"} side - Сторона ордера (покупка или продажа).
    */
@@ -131,7 +132,155 @@ export interface UserOrder {
    */
   isWorking: boolean;
   /**
+   * @property {number} workingTime - Время, когда ордер был помещен в книгу ордеров (timestamp).
+   */
+  workingTime: number;
+  /**
    * @property {string} origQuoteOrderQty - Изначальное количество в котируемой валюте.
    */
   origQuoteOrderQty: string;
+  /**
+   * @property {string} selfTradePreventionMode - Режим предотвращения самоторговли.
+   */
+  selfTradePreventionMode: string;
+}
+
+/**
+ * @interface WsExecutionReport
+ * @description Формат сообщения о выполнении ордера (executionReport) в User Data Stream.
+ * @see https://developers.binance.com/docs/binance-spot-api-docs/user-data-stream#payload-account-update
+ */
+export interface WsExecutionReport {
+  /**
+   * @property {string} e - Тип события (e.g., "executionReport").
+   */
+  e: string;
+  /**
+   * @property {number} E - Время события (timestamp).
+   */
+  E: number;
+  /**
+   * @property {string} s - Символ (торговая пара).
+   */
+  s: string;
+  /**
+   * @property {string} c - Пользовательский ID ордера.
+   */
+  c: string;
+  /**
+   * @property {"BUY" | "SELL"} S - Сторона ордера.
+   */
+  S: "BUY" | "SELL";
+  /**
+   * @property {string} o - Тип ордера.
+   */
+  o: string;
+  /**
+   * @property {string} f - Условие времени действия ордера.
+   */
+  f: string;
+  /**
+   * @property {string} q - Изначальное количество.
+   */
+  q: string;
+  /**
+   * @property {string} p - Цена ордера.
+   */
+  p: string;
+  /**
+   * @property {string} P - Стоп-цена.
+   */
+  P: string;
+  /**
+   * @property {string} F - Количество для "айсберг" ордера.
+   */
+  F: string;
+  /**
+   * @property {number} g - ID списка ордеров (-1 если нет).
+   */
+  g: number;
+  /**
+   * @property {string | null} C - Изначальный пользовательский ID ордера (для OCO).
+   */
+  C: string | null;
+  /**
+   * @property {string} x - Тип исполнения.
+   */
+  x: string;
+  /**
+   * @property {string} X - Статус ордера.
+   */
+  X: string;
+  /**
+   * @property {string} r - Причина отклонения ордера.
+   */
+  r: string;
+  /**
+   * @property {number} i - ID ордера.
+   */
+  i: number;
+  /**
+   * @property {string} l - Количество в последней исполненной сделке.
+   */
+  l: string;
+  /**
+   * @property {string} z - Суммарное исполненное количество.
+   */
+  z: string;
+  /**
+   * @property {string} L - Цена последней исполненной сделки.
+   */
+  L: string;
+  /**
+   * @property {string} n - Сумма комиссии.
+   */
+  n: string;
+  /**
+   * @property {string | null} N - Актив, в котором взята комиссия.
+   */
+  N: string | null;
+  /**
+   * @property {number} T - Время транзакции (timestamp).
+   */
+  T: number;
+  /**
+   * @property {number} t - ID сделки.
+   */
+  t: number;
+  /**
+   * @property {number} I - Игнорируется.
+   */
+  I: number;
+  /**
+   * @property {boolean} w - Находится ли ордер в книге ордеров.
+   */
+  w: boolean;
+  /**
+   * @property {boolean} m - Является ли тейкер мейкером.
+   */
+  m: boolean;
+  /**
+   * @property {boolean} M - Игнорируется.
+   */
+  M: boolean;
+  /**
+   * @property {number} O - Время создания ордера (timestamp).
+   */
+  O: number;
+  /**
+   * @property {string} Z - Суммарное количество в котируемой валюте, которое было исполнено.
+   */
+  Z: string;
+  /**
+   * @property {string} Y - Количество в котируемой валюте в последней сделке.
+   */
+  Y: string;
+  /**
+   * @property {number} W - Время, когда ордер был помещен в книгу ордеров (timestamp).
+   */
+  W: number;
+  /**
+   * @property {string} V - Режим предотвращения самоторговли.
+   */
+  V: string;
 }

@@ -3,9 +3,9 @@ import { Input, InputProps } from "@/shared/ui/input";
 import { cn } from "@/shared/lib/cn";
 import { SearchIcon } from "@/shared/ui/icon/ui/SearchIcon";
 
-export interface SearchBarProps extends Partial<InputProps> {
-  inputValue: string;
-  setInputValue: React.Dispatch<React.SetStateAction<string>>;
+export interface SearchBarProps extends Omit<InputProps, 'value' | 'onChange'> {
+  value: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   cancelVariant?: "onFocus" | "persistent";
   onCancelClick?: () => void;
   isFocused: boolean;
@@ -17,8 +17,8 @@ export const SearchBar: FC<SearchBarProps> = ({
   className,
   cancelVariant = "onFocus",
   onCancelClick,
-  inputValue,
-  setInputValue,
+  value,
+  onChange,
   isFocused,
   setIsFocused,
   ...props
@@ -56,8 +56,8 @@ export const SearchBar: FC<SearchBarProps> = ({
         <Input
           {...props}
           ref={inputRef}
-          value={inputValue}
-          setValue={setInputValue}
+          value={value}
+          onChange={onChange}
           onFocus={handleFocus}
           onBlur={handleBlur}
           leftIcon={<SearchIcon className="fill-TertiaryText h-full w-full" />}

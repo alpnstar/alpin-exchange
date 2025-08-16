@@ -3,14 +3,16 @@ import React, { FC, useState } from "react";
 import { Logo } from "@/shared/ui/logo";
 import { BurgerSvg, FaqSvg, ParamsSvg } from "@/shared/ui/icon";
 import { BurgerMenu } from "@/widgets/header/ui/BurgerMenu";
-import { ToSignUpButton } from "@/features/registration";
+import { ToSignInButton } from "@/features/registration";
 import { SearchMobile } from "@/features/coin-search";
-import { ToSignInButton } from "@/features/login";
+import { LogoutButton } from "@/features/login";
 
 import { SearchDesktop } from "@/features/coin-search/ui/SearchDesktop";
+import { useAppSelector } from "@/shared/lib";
 
 export const Header: FC = ({}) => {
   const [open, setopen] = useState(false);
+  const isAuthorized = useAppSelector((state) => state.user.authorized);
   return (
     <div className="bg-bg1 w-full px-6 py-4">
       <div className="mx-auto flex items-center justify-between">
@@ -80,8 +82,11 @@ export const Header: FC = ({}) => {
         <div className="flex items-center gap-4">
           <SearchDesktop />
           <div className="flex gap-3">
-            <ToSignInButton className={"hidden px-3 md:block"} />
-            <ToSignUpButton className={"px-3"} />
+            {!isAuthorized ? (
+              <ToSignInButton className={"hidden px-3 md:block"} />
+            ) : (
+              <LogoutButton className={"px-3"} />
+            )}
           </div>
 
           <BurgerMenu
@@ -95,8 +100,8 @@ export const Header: FC = ({}) => {
           >
             <div>
               <div className="flex items-baseline gap-4">
+                <LogoutButton width="w-full" className="w-full py-3" />
                 <ToSignInButton width="w-full" className="w-full py-3" />
-                <ToSignUpButton width="w-full" className="w-full py-3" />
               </div>
             </div>
             <SearchMobile burger={open} setBurger={setopen} />

@@ -13,8 +13,8 @@ export const SearchContent: FC<ISearchContentProps> = ({ setOpen }) => {
     <div>
       <SearchBar
         cancelVariant="persistent"
-        inputValue={query}
-        setInputValue={setQuery}
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
         onCancelClick={() => setOpen(false)}
         isFocused={isFocused}
         setIsFocused={setIsFocused}
